@@ -5,7 +5,7 @@ import { persist } from 'zustand/middleware';
 const UilayoutStore = create(
     persist(
         (set) => ({
-            sidebar: true,
+            sidebar: false,
             toggleUi: () =>
                 set((state) => {
                     const newMode = !state.sidebar;

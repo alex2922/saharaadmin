@@ -103,10 +103,10 @@ a {
     align-items: center;
     justify-content: center;
   }
-  &.disabled{
+  &.disabled {
     user-select: none;
     pointer-events: none;
-    cursor:not-allowed;
+    cursor: not-allowed;
     opacity: 0.3;
   }
 
@@ -133,10 +133,10 @@ a {
   align-items: center;
   justify-content: center;
 
-  &.disabled{
+  &.disabled {
     user-select: none;
     pointer-events: none;
-    cursor:not-allowed;
+    cursor: not-allowed;
     opacity: 0.3;
   }
 
@@ -158,16 +158,37 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  &.disabled{
+  &.disabled {
     user-select: none;
     pointer-events: none;
-    cursor:not-allowed;
+    cursor: not-allowed;
     opacity: 0.3;
   }
 
   svg {
     fill: var(--grey2) !important;
     scale: 1.2;
+  }
+}
+.btn4 {
+  aspect-ratio: 1;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  background: var(--grey);
+  border-radius: 4px;
+  svg {
+    stroke: var(--white);
+  }
+
+  &:hover {
+    background: var(--accent);
+    svg {
+      fill: var(--white) !important;
+    }
   }
 }
 
@@ -236,20 +257,24 @@ label {
     align-items: center;
     justify-content: space-between;
     padding: 0px 10px;
-    p{
+    p {
       color: var(--grey2);
       text-transform: capitalize;
       font-weight: 500;
     }
 
-    .counter{
+    .counter {
       color: var(--grey2);
-      &.error{
+      &.error {
         color: var(--accent);
       }
     }
   }
-  input , option , select , textarea ,.instruction {
+  input,
+  option,
+  select,
+  textarea,
+  .instruction {
     width: 100%;
     border: none;
     outline: none;
@@ -284,9 +309,42 @@ label {
     }
   }
 }
-.row{
+.row {
   display: flex;
   align-items: center;
   gap: 2rem;
   width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px 10px 0px 0px;
+  overflow: hidden;
+
+  thead {
+    background: var(--accentDark);
+    border-radius: 10px;
+    overflow: hidden;
+    tr {
+      th {
+        padding: 0.5rem 1rem;
+        color: white;
+        font-size: 1.4rem;
+        text-align: justify;
+        border-right: 1px solid var(--black);
+      }
+    }
+  }
+  tbody {
+    tr,
+    td {
+      padding: 1rem 1rem;
+      border: 1px solid var(--grey2);
+      &:hover {
+        background: rgba(117, 117, 117, 0.2);
+        cursor: pointer;
+      }
+    }
+  }
 }
