@@ -24,7 +24,7 @@ function page() {
 
   return <>
   
-  <div className="parent homepage">
+  {/* <div className="parent homepage">
   <div className="container homepage-container ">
     <div className="header">
       <div className="title">
@@ -155,7 +155,7 @@ function page() {
       </div>
     </form>
   </div>
-</div>
+</div> */}
 
   
   </>;
