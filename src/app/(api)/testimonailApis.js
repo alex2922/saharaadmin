@@ -10,7 +10,7 @@ export const getTestimonials = async () => {
     const jsonData = await response.json();
     return jsonData.reverse();
   } catch (error) {
-    console.log(error);
+    console.log(error );
   }
 };
 
