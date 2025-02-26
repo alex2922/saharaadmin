@@ -9,17 +9,7 @@ function page() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await axios.get(
-          "https://www.vps.diwiseglobal.com/saharaAmmusment/viedoAndAboutSection/get/1"
-        );
-        setData(response.data.data);
-        console.log(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    
   }, []);
 
   const [controls, setControls] = useState({

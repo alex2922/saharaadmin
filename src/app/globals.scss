@@ -1,11 +1,11 @@
 :root {
   --accent: #ed1c24;
   --accentDark: #8a0d12;
-  --grey: #1d1d1d;
-  --grey2: #414141;
+  --grey: #161616;
+  --grey2: #696969;
   --white: #fff;
-  --black: #000;
-  --text: #9c9c9c;
+  --black: #1d1d1d;
+  --text: #bbbbbb;
   --width: 1600px;
   --trans: all 0.25s ease-out;
   --shadow: 0px 0px 20px black;
@@ -13,10 +13,10 @@
 }
 
 .light {
-  --grey: #e1e1e1;
-  --grey2: #b6b6b6;
-  --white: #000;
-  --black: #ffffff;
+  --grey: #9e9d9d;
+  --grey2: #474646;
+  --white: #0c0c0c;
+  --black: #c9c9c9;
   --text: #3c3c3c;
 }
 
@@ -75,7 +75,7 @@ a {
   line-height: 160%;
   letter-spacing: 1px;
   word-spacing: 2px;
-  max-width: 65ch;
+
   text-wrap: pretty;
   font-weight: 400;
 }
@@ -326,6 +326,8 @@ table {
     background: var(--accentDark);
     border-radius: 10px;
     overflow: hidden;
+    border-bottom: 1px solid var(--grey2);
+
     tr {
       th {
         padding: 0.5rem 1rem;
@@ -347,4 +349,67 @@ table {
       }
     }
   }
+}
+
+.instruction {
+  background: var(--grey);
+  border-radius: 10px;
+  border: 1px solid var(--grey2);
+
+  .inst-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 4px 4px 4px 20px;
+
+    button {
+      svg {
+        scale: 2;
+      }
+    }
+  }
+  .inst-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-top: 1px solid var(--grey2);
+    width: 100%;
+    p {
+      width: 100% !important;
+      font-size: 1rem;
+      span {
+        color: var(--accent);
+        svg {
+          fill: var(--accent);
+        }
+      }
+    }
+  }
+}
+
+
+
+::-webkit-scrollbar {
+  width: 8px; /* Adjust width */
+  height: 8px; /* For horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Invisible track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* Light black, slightly transparent */
+  border-radius: 10px; /* Rounded edges */
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5); /* Darker on hover */
+}
+
+/* Optional: Hide scrollbar on macOS-like behavior */
+::-webkit-scrollbar-button {
+  display: none;
 }
