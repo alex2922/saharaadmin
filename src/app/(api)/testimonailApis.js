@@ -56,22 +56,22 @@ export const addTestimonials = async (name, review, star) => {
 };
 
 
-export const updateTestimonials = async (id,name, review, star) => {
+export const updateTestimonials = async (id, name, review, star) => {
   try {
-    await fetch(`${baseUrl}/testemonials/updateTestemonials`, {
+    const response = await fetch(`${baseUrl}/testemonials/updateTestemonials`, { // Store the fetch response
       method: "PUT",
       headers: {
-        "Content-Type": "application/json", 
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         id: id,
         name: name,
-        feedBack: review,  
-        stars: star
-    })
-
+        feedBack: review,
+        stars: star,
+      }),
     });
-    if (!response.ok) {
+
+    if (!response.ok) { // Now response is defined
       throw new Error(
         `Failed to update testimonial: ${response.status} ${response.statusText}`
       );
@@ -81,6 +81,5 @@ export const updateTestimonials = async (id,name, review, star) => {
     console.log(error);
   }
 };
-
 
 

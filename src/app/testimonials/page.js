@@ -1,26 +1,31 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./testimonials.scss";
-import { getTestimonials, deleteTestimonials, addTestimonials } from "../(api)/testimonailApis";
+import {
+  getTestimonials,
+  deleteTestimonials,
+  addTestimonials,
+  updateTestimonials,
+} from "../(api)/testimonailApis";
 import { MdModeEdit } from "react-icons/md";
 import { IoMdStar } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Confirmation from "../(comps)/confirmation/Confirmation";
-import { notification } from "antd";
-import "antd/dist/reset.css"; 
-
+import { ToastContainer, toast } from "react-toastify";
+import ThemeStore from "../(comps)/store/Theme";
 
 const page = () => {
+  const { isDarkMode } = ThemeStore();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [controls, setControls] = useState({
     name: "",
-    review:"",
+    review: "",
     star: 3,
     instruction: true,
     deleteId: null,
-    updateId:null,
+    updateId: null,
   });
 
   useEffect(() => {
@@ -35,60 +40,92 @@ const page = () => {
     if (!id) return;
     setIsLoading(true);
     try {
-      await deleteTestimonials(id); 
+      await deleteTestimonials(id);
       const updatedData = await getTestimonials();
       setData(updatedData);
-      openNotification("success", "Testimonial deleted", "Your review has been deleted successfully!");
     } catch (error) {
       console.error("Error deleting testimonial:", error);
     } finally {
       setIsLoading(false);
       setControls({ ...controls, deleteId: null });
+      toast.warning("Review Deleted", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        theme: isDarkMode ? "dark" : "light",
+      });
     }
   };
 
   const createT = async () => {
+    
     setIsLoading(true);
     try {
       await addTestimonials(controls.name, controls.review, controls.star);
       const updatedData = await getTestimonials();
       setData(updatedData);
-      openNotification("success", "Testimonial Created", "Your review has been published successfully!");
     } catch (error) {
       console.error("Error creating testimonial:", error);
     } finally {
       setIsLoading(false);
       setControls({ ...controls, name: "", review: "", star: 3 });
+      toast.success("New Review Added", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        theme: isDarkMode ? "dark" : "light",
+      });
     }
   };
 
-  const updateT = async (id) => {
+  const updateT = async (e) => {
     setIsLoading(true);
-    
+    e.preventDefault();
+
     try {
-      await addTestimonials( id ,controls.name, controls.review, controls.star);
+      await updateTestimonials(controls.updateId, controls.name, controls.review, controls.star);
       const updatedData = await getTestimonials();
       setData(updatedData);
-      openNotification("success", "Testimonial Updated", "Your review has been Updated successfully!");
     } catch (error) {
       console.error("Error creating testimonial:", error);
     } finally {
       setIsLoading(false);
-      setControls({ ...controls, name: "", review: "", star: 3 ,updateId:null });
+      setControls({
+        ...controls,
+        name: "",
+        review: "",
+        star: 3,
+        updateId: null,
+      });
+      toast.success("Review Updated", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        theme: isDarkMode ? "dark" : "light",
+      });
     }
   };
 
-  const openNotification = (type, message, description) => {
-    notification[type]({
-      message: message,
-      description: description,
-      placement: "bottomRight", // Position of the notification
-    });
-  };
+  useEffect(() => {
+    if (data && data.length >= 7) {
+      toast.error("Maximum Testimonials Reached", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        theme: isDarkMode ? "dark" : "light",
+      });
+    }
+  }, [data]);
   
 
   return (
     <>
+      <ToastContainer />
+
       {controls.deleteId && (
         <Confirmation
           title="are you sure?"
@@ -106,8 +143,6 @@ const page = () => {
               <h2>Testimonials Content </h2>
             </div>
             <div className="btns ">
-              {controls.updateId ? <button className={controls.name && controls.name.length <= 20 && controls.review && controls.review.length <= 200  ? "btn" : "btn disabled"} onClick={() => updateT(controls.updateId)}  >Update Review</button>:
-              <button className={controls.name && controls.name.length <= 20 && controls.review && controls.review.length <= 200  ? "btn" : "btn disabled"} onClick={createT}  >Publish Review</button>}
               <button
                 className="btn2"
                 onClick={() => {
@@ -116,9 +151,16 @@ const page = () => {
                     setData(data);
                     setIsLoading(false);
                   });
+                  toast.info("Data Refreshed", {
+                    position: "top-center",
+                    autoClose: 500,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    theme: isDarkMode ? "dark" : "light",
+                  });
                 }}
               >
-                Refresh
+                Refresh Data
               </button>
             </div>
           </div>
@@ -143,12 +185,12 @@ const page = () => {
                 {controls.instruction && (
                   <div className="inst-content">
                     <p>
-                      <span>1.</span> Adding a New Testimonial Fill out the form on the right
-                      to add a new review.
+                      <span>1.</span> Adding a New Testimonial Fill out the form
+                      on the right to add a new review.
                     </p>
                     <p>
-                      <span>2.</span> Publishing Content Click the <span>Publish</span>{" "}
-                      button to make the testimonials live.
+                      <span>2.</span> Publishing Content Click the{" "}
+                      <span>Publish</span> button to make the testimonials live.
                     </p>
                     <p>
                       <span>3.</span> Editing a Testimonial Click the{" "}
@@ -159,16 +201,18 @@ const page = () => {
                       automatically populate in the form.
                     </p>
                     <p>
-                      <span>4.</span> Updating Changes The <span>Update</span> button will
-                      only appear after selecting a testimonial for editing.
+                      <span>4.</span> Updating Changes The <span>Update</span>{" "}
+                      button will only appear after selecting a testimonial for
+                      editing.
                     </p>
                     <p>
-                      <span>5.</span> Review Limit A maximum of <span>7 testimonials</span>{" "}
-                      can be stored at a time.
+                      <span>5.</span> Review Limit A maximum of{" "}
+                      <span>7 testimonials</span> can be stored at a time.
                     </p>
                     <p>
-                      <span>6.</span> Refreshing Data Click the <span>Refresh</span> button
-                      to load the latest testimonials from the database.
+                      <span>6.</span> Refreshing Data Click the{" "}
+                      <span>Refresh</span> button to load the latest
+                      testimonials from the database.
                     </p>
                     <p>
                       <span>7.</span> Minimum Requirement Ensure at least{" "}
@@ -209,15 +253,18 @@ const page = () => {
                                 `${tdata.data.stars} Stars`}
                             </td>
                             <td>
-                              <button className="btn4" onClick={()=>{
-                                setControls({
-                                  ...controls,
-                                  updateId: tdata.data.id,
-                                  name: tdata.data.name,
-                                  review: tdata.data.feedBack,
-                                  star: tdata.data.stars,
-                                })
-                              }} >
+                              <button
+                                className="btn4"
+                                onClick={() => {
+                                  setControls({
+                                    ...controls,
+                                    updateId: tdata.data.id,
+                                    name: tdata.data.name,
+                                    review: tdata.data.feedBack,
+                                    star: tdata.data.stars,
+                                  });
+                                }}
+                              >
                                 <MdModeEdit />
                               </button>
                               <button
@@ -243,7 +290,7 @@ const page = () => {
               )}
             </div>
             <div className="right">
-              <h2>Add New Testimonials </h2>
+              {controls.updateId ? <h2>Update Testimonials </h2> : <h2>Add New Testimonials </h2>}
               <form>
                 <label>
                   <div className="top">
@@ -330,6 +377,35 @@ const page = () => {
                     </div>
                   </div>
                 </label>
+                {controls.updateId ? (
+                  <button
+                    className={
+                      controls.name &&
+                      controls.name.length <= 20 &&
+                      controls.review &&
+                      controls.review.length <= 200
+                        ? "btn"
+                        : "btn disabled"
+                    }
+                    onClick={updateT}
+                  >
+                    Update Review
+                  </button>
+                ) : (
+                  <button
+                    className={
+                      controls.name &&
+                      controls.name.length <= 20 &&
+                      controls.review &&
+                      controls.review.length <= 200
+                        ? "btn"
+                        : "btn disabled"
+                    }
+                    onClick={createT}
+                  >
+                    Publish Review
+                  </button>
+                )}
               </form>
             </div>
           </div>
