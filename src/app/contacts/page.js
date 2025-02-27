@@ -71,6 +71,7 @@ const Page = () => {
         cdata.data.email,
         cdata.data.phoneNumber,
         cdata.data.message,
+        cdata.data.activity,
       ].some((field) =>
         field?.toLowerCase().includes(controls.search.toLowerCase())
       )
@@ -122,7 +123,14 @@ const Page = () => {
               }
             >
               <h2>How to Use</h2>
-              <button className="btn4">
+              <button
+                className="btn4"
+                style={
+                  controls.instruction
+                    ? { transform: "rotate(180deg)" }
+                    : { transform: "rotate(0deg)" }
+                }
+              >
                 <IoMdArrowDropdown />
               </button>
             </div>
@@ -131,7 +139,7 @@ const Page = () => {
               <div className="inst-content">
                 <p>
                   <span>1.</span> Use the search bar to find specific contacts
-                  by name, email, or phone.
+                  by name, email, phone, activity or message.
                 </p>
                 <p>
                   <span>2.</span> Click <span>Refresh Data</span> to load the

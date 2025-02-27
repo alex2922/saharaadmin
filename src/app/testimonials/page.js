@@ -59,18 +59,27 @@ const page = () => {
   };
 
   const createT = async () => {
-    
-    setIsLoading(true);
-    try {
-      await addTestimonials(controls.name, controls.review, controls.star);
-      const updatedData = await getTestimonials();
-      setData(updatedData);
-    } catch (error) {
-      console.error("Error creating testimonial:", error);
-    } finally {
-      setIsLoading(false);
-      setControls({ ...controls, name: "", review: "", star: 3 });
-      toast.success("New Review Added", {
+    if (data && data.length < 7) {
+      setIsLoading(true);
+      try {
+        await addTestimonials(controls.name, controls.review, controls.star);
+        const updatedData = await getTestimonials();
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error creating testimonial:", error);
+      } finally {
+        setIsLoading(false);
+        setControls({ ...controls, name: "", review: "", star: 3 });
+        toast.success("New Review Added", {
+          position: "top-center",
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          theme: isDarkMode ? "dark" : "light",
+        });
+      }
+    } else {
+      toast.warning("Action revoked", {
         position: "top-center",
         autoClose: 500,
         hideProgressBar: false,
@@ -85,7 +94,12 @@ const page = () => {
     e.preventDefault();
 
     try {
-      await updateTestimonials(controls.updateId, controls.name, controls.review, controls.star);
+      await updateTestimonials(
+        controls.updateId,
+        controls.name,
+        controls.review,
+        controls.star
+      );
       const updatedData = await getTestimonials();
       setData(updatedData);
     } catch (error) {
@@ -120,7 +134,6 @@ const page = () => {
       });
     }
   }, [data]);
-  
 
   return (
     <>
@@ -143,6 +156,35 @@ const page = () => {
               <h2>Testimonials Content </h2>
             </div>
             <div className="btns ">
+              {controls.updateId ? (
+                <button
+                  className={
+                    controls.name &&
+                    controls.name.length <= 20 &&
+                    controls.review &&
+                    controls.review.length <= 200
+                      ? "btn"
+                      : "btn disabled"
+                  }
+                  onClick={updateT}
+                >
+                  Update Review
+                </button>
+              ) : (
+                <button
+                  className={
+                    controls.name &&
+                    controls.name.length <= 20 &&
+                    controls.review &&
+                    controls.review.length <= 200
+                      ? "btn"
+                      : "btn disabled"
+                  }
+                  onClick={createT}
+                >
+                  Publish Review
+                </button>
+              )}
               <button
                 className="btn2"
                 onClick={() => {
@@ -178,7 +220,14 @@ const page = () => {
                   }
                 >
                   <h2>Instructions</h2>
-                  <button className="btn4">
+                  <button
+                    className="btn4"
+                    style={
+                      controls.instruction
+                        ? { transform: "rotate(180deg)" }
+                        : { transform: "rotate(0deg)" }
+                    }
+                  >
                     <IoMdArrowDropdown />
                   </button>
                 </div>
@@ -290,7 +339,11 @@ const page = () => {
               )}
             </div>
             <div className="right">
-              {controls.updateId ? <h2>Update Testimonials </h2> : <h2>Add New Testimonials </h2>}
+              {controls.updateId ? (
+                <h2>Update Testimonials </h2>
+              ) : (
+                <h2>Add New Testimonials </h2>
+              )}
               <form>
                 <label>
                   <div className="top">
@@ -377,35 +430,6 @@ const page = () => {
                     </div>
                   </div>
                 </label>
-                {controls.updateId ? (
-                  <button
-                    className={
-                      controls.name &&
-                      controls.name.length <= 20 &&
-                      controls.review &&
-                      controls.review.length <= 200
-                        ? "btn"
-                        : "btn disabled"
-                    }
-                    onClick={updateT}
-                  >
-                    Update Review
-                  </button>
-                ) : (
-                  <button
-                    className={
-                      controls.name &&
-                      controls.name.length <= 20 &&
-                      controls.review &&
-                      controls.review.length <= 200
-                        ? "btn"
-                        : "btn disabled"
-                    }
-                    onClick={createT}
-                  >
-                    Publish Review
-                  </button>
-                )}
               </form>
             </div>
           </div>

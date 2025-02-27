@@ -11,6 +11,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { FiHome } from "react-icons/fi";
 import { AiOutlineProduct } from "react-icons/ai";
 import { FaRegNoteSticky } from "react-icons/fa6";
+import { FaQuora } from "react-icons/fa6";
 import { HiOutlineLogout } from "react-icons/hi";
 
 function Sidebar() {
@@ -38,6 +39,11 @@ function Sidebar() {
       name: "Activity",
       path: "/activity",
       icon: <AiOutlineProduct />,
+    },
+    {
+      name: "FAQs",
+      path: "/faq",
+      icon: <FaQuora />,
     },
     {
       name: "Contacts",
