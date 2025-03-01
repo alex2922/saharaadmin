@@ -14,7 +14,19 @@ export default function RootLayout({ children }) {
         <div className={sidebar ? "sidebar-wrapper " : "sidebar-wrapper collapsed"}>
           <Sidebar />
         </div>
-        <div className={sidebar ? "content-area " : "content-area extened"}>{children}</div>
+        <div className={sidebar ? "content-area " : "content-area extened"}>
+          
+          {children}
+         
+          
+          </div>
+
+           
+          <div className="error-screen">
+            
+            <p>Please use a larger device to view this page</p>
+
+          </div>
       </body>
     </html>
   );

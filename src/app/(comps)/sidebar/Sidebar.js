@@ -13,6 +13,8 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { FaQuora } from "react-icons/fa6";
 import { HiOutlineLogout } from "react-icons/hi";
+import { MdVideoLibrary } from "react-icons/md";
+import { MdTextSnippet } from "react-icons/md";
 
 function Sidebar() {
   const { isDarkMode, toggleTheme } = ThemeStore();
@@ -26,9 +28,14 @@ function Sidebar() {
       icon: <LuLayoutDashboard />,
     },
     {
-      name: "Home Page",
-      path: "/homepage",
-      icon: <FiHome />,
+      name: "Hero Section",
+      path: "/hero",
+      icon: <MdVideoLibrary />,
+    },
+    {
+      name: "About Page",
+      path: "/about",
+      icon: <MdTextSnippet />,
     },
     {
       name: "Testimonials",

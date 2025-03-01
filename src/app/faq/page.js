@@ -85,7 +85,7 @@ const page = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((fdata, index) => (
+                {data[0] && data.map((fdata, index) => (
                   <tr key={index}>
                     <td>{fdata.data.id}</td>
                     <td>{fdata.data.question}</td>
