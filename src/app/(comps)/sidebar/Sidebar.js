@@ -15,6 +15,9 @@ import { FaQuora } from "react-icons/fa6";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdVideoLibrary } from "react-icons/md";
 import { MdTextSnippet } from "react-icons/md";
+import 'react-tooltip/dist/react-tooltip.css'
+import { Tooltip } from 'react-tooltip'
+import { Tooltip as ReactTooltip } from 'react-tooltip'
 
 function Sidebar() {
   const { isDarkMode, toggleTheme } = ThemeStore();
@@ -60,45 +63,51 @@ function Sidebar() {
   ];
 
   return (
-    <div className={sidebar ? "sidebar " : "sidebar collapse"}>
-      <div className="links">
-        <div className="top">
-          <h3>
-           {sidebar ? <> Sahara 
-            <br />
-            Amusement</> :<></> }
-          </h3>
-          <button
-            className={sidebar ? "btn3 active" : "btn3 "}
-            onClick={toggleUi}
-          >
-            <IoIosArrowForward />
+    <>
+      <Tooltip id="my-tooltip" />
+      <div className={sidebar ? "sidebar " : "sidebar collapse"}>
+        <div className="links">
+          <div className="top">
+            <h3>
+              {sidebar ? <> Sahara
+                <br />
+                Amusement</> : <></>}
+            </h3>
+            <button
+              className={sidebar ? "btn3 active" : "btn3 "}
+              onClick={toggleUi}
+            >
+              <IoIosArrowForward />
+            </button>
+          </div>
+
+          {links.map((link, index) => (
+            <Link
+              key={index}
+              className={pathname === link.path ? "active" : ""}
+              href={link.path}
+              {...(sidebar ? {} : { "data-tooltip-id": "my-tooltip", "data-tooltip-content": link.name })}
+            >
+
+
+              <span>
+                {link.icon}
+              </span>
+
+              {sidebar && link.name}
+            </Link>
+          ))}
+        </div>
+        <div className="btns">
+          {sidebar ? <button className="btn"> <span><HiOutlineLogout /> </span>Logout</button> :
+            <button className="btn"> <span><HiOutlineLogout /> </span></button>}
+          <button className="btn2" onClick={toggleTheme}>
+            {isDarkMode ? <MdDarkMode /> : <MdSunny />}
           </button>
         </div>
+      </div>
 
-        {links.map((link, index) => (
-          <Link
-            key={index}
-            className={pathname === link.path ? "active" : ""}
-            href={link.path}
-          >
-           
-           <span>
-            {link.icon}
-           </span>
-           
-            {sidebar &&link.name}
-          </Link>
-        ))}
-      </div>
-      <div className="btns">
-       {sidebar ? <button className="btn"> <span><HiOutlineLogout /> </span>Logout</button> :
-        <button className="btn"> <span><HiOutlineLogout /> </span></button>}
-        <button className="btn2" onClick={toggleTheme}>
-          {isDarkMode ? <MdDarkMode /> : <MdSunny />}
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
 
