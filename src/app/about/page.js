@@ -11,15 +11,31 @@ const page = () => {
   const { isDarkMode } = ThemeStore();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [controls, setControls] = useState({});
+  const [controls, setControls] = useState({
+    title: "",
+    description: "",
+    btn_text: "",
+    btn_link: "",
+  });
 
   useEffect(() => {
     setIsLoading(true);
     getAboutData().then((data) => {
-      setData(data);
+      setData(data.data);
       setIsLoading(false);
+      setControls({
+        title: data.data.title,
+        description: data.data.description,
+        btn_text: data.data.btn_text,
+        btn_link: data.data.btn_link,
+      })
     });
   }, []);
+
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <>
@@ -45,8 +61,60 @@ const page = () => {
             </div>
           </div>
           <div className="aboutsection">
-            <div className="imgbox">
-                
+            <div className="left">
+              
+            <label>
+                <div className="top">
+                  <p>title Content*</p>
+                  <div
+                    className={
+                      controls.title.length > 50
+                        ? "counter error"
+                        : "counter"
+                    }
+                  >
+                    {controls.title.length}/50
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  value={controls.title}
+                  onChange={(e) =>
+                    setControls({ ...controls, title: e.target.value })
+                  }
+                />
+                {controls.title.length > 50 && (
+                  <span className="error">title message is too long</span>
+                )}
+              </label>
+              <label>
+                <div className="top">
+                  <p>description Content*</p>
+                  <div
+                    className={
+                      controls.description.length > 550
+                        ? "counter error"
+                        : "counter"
+                    }
+                  >
+                    {controls.description.length}/550
+                  </div>
+                </div>
+                <textarea
+                  type="text"
+                  value={controls.description}
+                  onChange={(e) =>
+                    setControls({ ...controls, description: e.target.value })
+                  }
+                />
+                {controls.description.length > 550 && (
+                  <span className="error">description message is too long</span>
+                )}
+              </label>
+            </div>
+
+            <div className="right">
+              <div className="imgbox"></div>
             </div>
           </div>
         </div>

@@ -271,17 +271,15 @@ const page = () => {
                   </div>
                 )}
               </div>
-
               {data && !isLoading ? (
                 <>
+                  {" "}
                   <table>
                     <thead>
                       <tr>
-                        <th>Sr. No</th>
-                        <th>Name</th>
-                        <th>Review</th>
-                        <th>Stars</th>
-                        <th>Actions</th>
+                        {" "}
+                        <th>Sr. No</th> <th>Name</th> <th>Review</th>{" "}
+                        <th>Stars</th> <th>Actions</th>{" "}
                       </tr>
                     </thead>
                     <tbody>
@@ -294,14 +292,16 @@ const page = () => {
                       ) : (
                         data.map((tdata, index) => (
                           <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{tdata?.data?.name}</td>
-                            <td>{tdata?.data?.feedBack}</td>
+                            {" "}
+                            <td>{index + 1}</td> <td>{tdata?.data?.name}</td>{" "}
+                            <td>{tdata?.data?.feedBack}</td>{" "}
                             <td>
+                              {" "}
                               {tdata?.data?.stars &&
-                                `${tdata.data.stars} Stars`}
-                            </td>
+                                `${tdata.data.stars} Stars`}{" "}
+                            </td>{" "}
                             <td>
+                              {" "}
                               <button
                                 className="btn4"
                                 onClick={() => {
@@ -314,8 +314,9 @@ const page = () => {
                                   });
                                 }}
                               >
-                                <MdModeEdit />
-                              </button>
+                                {" "}
+                                <MdModeEdit />{" "}
+                              </button>{" "}
                               <button
                                 className="btn4"
                                 onClick={() =>
@@ -325,52 +326,59 @@ const page = () => {
                                   })
                                 }
                               >
-                                <MdDeleteOutline />
-                              </button>
-                            </td>
+                                {" "}
+                                <MdDeleteOutline />{" "}
+                              </button>{" "}
+                            </td>{" "}
                           </tr>
                         ))
-                      )}
-                    </tbody>
-                  </table>
+                      )}{" "}
+                    </tbody>{" "}
+                  </table>{" "}
                 </>
               ) : (
                 <p className="loading">Loading DataBase...</p>
-              )}
-            </div>
+              )}{" "}
+            </div>{" "}
             <div className="right">
+              {" "}
               {controls.updateId ? (
                 <h2>Update Testimonials </h2>
               ) : (
                 <h2>Add New Testimonials </h2>
-              )}
+              )}{" "}
               <form>
+                {" "}
                 <label>
+                  {" "}
                   <div className="top">
-                    <p>Client Name*</p>
+                    {" "}
+                    <p>Client Name*</p>{" "}
                     <div
                       className={`counter ${
                         controls.name.length > 20 ? "error" : ""
                       }`}
                     >
-                      {controls.name.length}/20
-                    </div>
-                  </div>
+                      {" "}
+                      {controls.name.length}/20{" "}
+                    </div>{" "}
+                  </div>{" "}
                   <input
                     type="text"
                     value={controls.name}
                     onChange={(e) =>
                       setControls({ ...controls, name: e.target.value })
                     }
-                  />
+                  />{" "}
                   {controls.name.length > 20 && (
                     <span className="error">Only 20 characters allowed</span>
-                  )}
-                </label>
-
+                  )}{" "}
+                </label>{" "}
                 <label>
+                  {" "}
                   <div className="top">
-                    <p>Review Content*</p>
+                    {" "}
+                    <p>Review Content*</p>{" "}
                     <div
                       className={
                         controls.review.length > 200
@@ -392,7 +400,6 @@ const page = () => {
                     <span className="error">Review message is too long</span>
                   )}
                 </label>
-
                 <label>
                   <div className="top">
                     <p>Star Rating*</p>
