@@ -1,14 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import "./page.scss";
 import CountUp from "react-countup";
-
-
-
+import { getTestimonials } from "./(api)/homepageApis";
+import { useEffect, useState } from "react";
+import { getContacts } from "./(api)/contactAPi";
 
 function Card(props) {
   return (
-    <div className={`card ${props.className}`}>
+    <Link href={props.link} className={`card ${props.className}`}>
       <div className="top">
         <h3>{props.title}</h3>
       </div>
@@ -18,11 +19,31 @@ function Card(props) {
           {props.desc}
         </h1>
       </div>
-    </div>
+    </Link>
   );
 }
 
 export default function Home() {
+  const [stats, setStats] = useState({
+    testimonials: 0,
+    contacts:0,
+  });
+
+  // const [helper, setHelper] = useState([]);
+
+  useEffect(() => {
+    getTestimonials().then((data) => {
+      setStats({ ...stats, testimonials: data.length });
+    });
+    getContacts().then((data) => {
+      // setStats({ ...stats, contacts: data.length });
+      console.log(data);
+    });
+
+
+
+  }, []);
+
   return (
     <div className="parent dashboard">
       <div className="dashboard-container container">
@@ -36,13 +57,36 @@ export default function Home() {
 
         <div className="bento-wrapper">
           <div className="bento">
-            <Card className="card1" title="Activity" number={<CountUp end={6} duration={2} />} desc="Activities" />
-            <Card className="card2" title="About Page" />
-            <Card className="card3" title="Testimonials" number={<CountUp end={6} duration={2} />} desc="Testimonials" />
-            <Card className="card4" title="Hero Section" />
-            <Card className="card5" title="FAQ" number={<CountUp end={16} duration={2} />} desc="FAQs" />
-            <Card className="card6" title="Contacts" number={<CountUp end={200} duration={2} />} desc="Contacts" />
-            
+            <Card
+              link="/activity"
+              className="card1"
+              title="Activity"
+              number={<CountUp end={6} duration={2} />}
+              desc="Activities"
+            />
+            <Card link="/about" className="card2" title="About Page" />
+            <Card
+              link="/testimonials"
+              className="card3"
+              title="Testimonials"
+              number={<CountUp end={stats.testimonials} duration={2} />}
+              desc="Testimonials"
+            />
+            <Card link="/hero" className="card4" title="Hero Section" />
+            <Card
+              link="/faq"
+              className="card5"
+              title="FAQ"
+              number={<CountUp end={16} duration={2} />}
+              desc="FAQs"
+            />
+            <Card
+              link="/contacts"
+              className="card6"
+              title="Contacts"
+              number={<CountUp end={stats.contacts} duration={2} />}
+              desc="Contacts"
+            />
           </div>
         </div>
       </div>
