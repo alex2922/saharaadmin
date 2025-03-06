@@ -9,7 +9,6 @@ import { getActivity } from "../(api)/ActivityApi";
 const page = () => {
   const [data, setData] = useState([]);
   const [pages, setPages] = useState([]);
-  const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [controls, setControls] = useState({
     deleteId: null,
@@ -17,7 +16,8 @@ const page = () => {
     instruction: true,
     question: "",
     answer: "",
-    page: "sfasdfas",
+    page: "home",
+
   });
 
   const getdata = () => {

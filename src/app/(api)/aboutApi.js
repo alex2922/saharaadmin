@@ -16,22 +16,32 @@ export const getAboutData = async () => {
 
 
 
-export const updateAboutData = async() => {
+export const updateAboutData = async (title, description, buttonText, imageFile) => {
   try {
+    const formData = new FormData();
+    
+    // Append JSON data as a string
+    const data = JSON.stringify({
+      title: title,
+      description: description,
+      buttonText: buttonText,
+      buttonLink: "/contact",
+    });
+    formData.append("data", data);
+
+    // Append the image file
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
     const response = await fetch(`${baseUrl}/viedoAndAboutSection/update/2`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json", 
-      },
-      body: JSON.stringify({
-        name: name,
-        feedBack: review,  
-        stars: star
-    })
+      body: formData, // No need to set Content-Type; the browser does it automatically
     });
+
     const jsonData = await response.json();
     return jsonData;
   } catch (error) {
-    console.log(error );
+    console.error(error);
   }
-}
+};

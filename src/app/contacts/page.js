@@ -15,6 +15,7 @@ const Page = () => {
     deleteId: null,
     search: "",
     instruction: true,
+    
   });
 
   const loadData = () => {
@@ -189,6 +190,7 @@ const Page = () => {
                     <th>Phone</th>
                     <th>Message</th>
                     <th>Activity</th>
+                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -210,6 +212,7 @@ const Page = () => {
                         <td>{cdata.data.phoneNumber}</td>
                         <td>{cdata.data.message}</td>
                         <td>{cdata.data.activity}</td>
+                        <td>{cdata.data.status}</td>
                         <td>
                           <button
                             className="btn2"

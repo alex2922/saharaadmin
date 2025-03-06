@@ -2,7 +2,7 @@ const baseUrl = "https://www.vps.diwiseglobal.com/saharaAmmusment";
 
 export const getFaqs = async () => {
   try {
-    const response = await fetch(`${baseUrl}faq/GetAll`, {
+    const response = await fetch(`${baseUrl}/faq/GetAll`, {
       method: "GET",
     });
     const jsonData = await response.json();
