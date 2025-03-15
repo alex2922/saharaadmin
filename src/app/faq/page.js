@@ -6,7 +6,7 @@ import { addFaqs, getFaqs } from "../(api)/faqApi";
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
 import { getActivity } from "../(api)/ActivityApi";
 
-const page = () => {
+const Page = () => {
   const [data, setData] = useState([]);
   const [pages, setPages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -166,4 +166,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -34,7 +34,7 @@ const page = () => {
       setData(data);
       setIsLoading(false);
     });
-  }, []);
+  }, []);                       
 
   const deleteT = async (id) => {
     if (!id) return;

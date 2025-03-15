@@ -1,5 +1,4 @@
-const baseUrl = "https://www.vps.diwiseglobal.com/saharaAmmusment";
-
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 export const getActivity = async () => {
   try {
     const response = await fetch(`${baseUrl}/activity/GetAll`, {
