@@ -32,7 +32,7 @@ function Sidebar() {
     },
     {
       name: "Hero Section",
-      path: "/hero",
+      path: "/homepage",
       icon: <MdVideoLibrary />,
     },
     {

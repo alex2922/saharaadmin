@@ -14,6 +14,7 @@ export const getFaqs = async () => {
 
 export const addFaqs = async (question, answer, page) => {
     try {
+      console.log(question,"question")
       const response = await fetch(`${baseUrl}/faq/addFaq`, {
         method: "POST",  // ✅ Change to POST
         headers: {
