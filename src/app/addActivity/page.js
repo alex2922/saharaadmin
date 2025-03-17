@@ -5,8 +5,13 @@ import { GoPlus } from "react-icons/go";
 import { LuMinus } from "react-icons/lu";
 import "./addActivity.scss";
 import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+
 const Page = () => {
   const [errors, setErrors] = useState({});
+  const searchParams = useSearchParams();
+  const id = searchParams.get("acivityId");
+  const router = useRouter();
   const [addData, setAddData] = useState({
     title: "",
     activityTitle: "",
@@ -36,6 +41,20 @@ const Page = () => {
     setKeyValuePairs(updatedPairs);
   };
 
+  const handleFileChange = (event, type) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const fileUrl = URL.createObjectURL(file);
+
+    if (type === "feature") {
+      setimage({ image: file, imagePrev: fileUrl });
+    } else if (type === "cover") {
+      setCoverImage({ coverImage: file, coverImagePrev: fileUrl });
+    }
+  };
+
   const handleAddRow = () => {
     setKeyValuePairs([...keyValuePairs, { key: "", value: "" }]);
   };
@@ -62,19 +81,78 @@ const Page = () => {
 
   const addActivity = async () => {
     try {
-        const formdata = new FormData();
+      const formdata = new FormData();
 
+      if (id) {
+        formdata.append("data", JSON.stringify({ ...addData, aid: id }));
+      }else{
         formdata.append("data", JSON.stringify(addData));
-        formdata.append("image", image.image);
-        formdata.append("coverImage", coverImage.coverImage);
+      }
+     
+      formdata.append("image", image.image);
+      formdata.append("coverImage", coverImage.coverImage);
+      let response;
 
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/activity/Add`,formdata);
+      if (id) {
+        response = await axios.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/activity/update`,
+          formdata
+        );
+      } else {
+        response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/activity/Add`,
+          formdata
+        );
+      }
 
-        console.log(response)
+      console.log(response)
+      if (response.status === 201) {
+       router.push("/activity")
+      }
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
+  const getActivtyData = async (id) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/activity/getById?activityId=${id}`
+      );
+
+      setAddData({
+        title: response.data.data.title,
+        activityTitle: response.data.data.activityTitle,
+        description: response.data.data.description,
+      });
+
+      setimage({
+        image:null,
+        imagePrev: response.data.data.image,
+      });
+
+      setCoverImage({
+        coverImage:null,
+        coverImagePrev: response.data.data.coverImage,
+      });
+      const additionalInfoArray = Object.entries(
+        response.data.data.additionalInfo
+      ).map(([key, value]) => ({
+        key,
+        value,
+      }));
+
+      setKeyValuePairs(additionalInfoArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getActivtyData(id);
+    }
+  }, [id]);
+
   return (
     <>
       <div className="parent homepage">
@@ -82,10 +160,12 @@ const Page = () => {
           <div className="header">
             <div className="title">
               <div className="back"></div>
-              <h2>Acitivty Page Content </h2>
+              <h2>Add Acitivty Page Content </h2>
             </div>
             <div className="btns">
-              <button className="btn "  onClick={addActivity} >Save</button>
+              <button className="btn " onClick={addActivity}>
+                {id ? "Update" : "Save"}
+              </button>
               <button className="btn2 ">Reset</button>
             </div>
           </div>
@@ -97,11 +177,11 @@ const Page = () => {
                     <p>Title *</p>
                   </div>
                   <input
-                    placeholder="your main hero heading goes here..."
+                    placeholder="your activity title goes here..."
                     type="text"
                     value={addData.title}
                     onChange={(e) =>
-                        setAddData({ ...addData, title: e.target.value })
+                      setAddData({ ...addData, title: e.target.value })
                     }
                   />
                 </label>
@@ -117,11 +197,11 @@ const Page = () => {
                     </div>
                   </div>
                   <input
-                    placeholder="your main hero heading goes here..."
+                    placeholder="your main activity title goes here..."
                     type="text"
                     value={addData.activityTitle}
                     onChange={(e) =>
-                        setAddData({ ...addData, activityTitle: e.target.value })
+                      setAddData({ ...addData, activityTitle: e.target.value })
                     }
                   />
                 </label>
@@ -133,11 +213,11 @@ const Page = () => {
                     <div className="counter">10/10</div>
                   </div>
                   <textarea
-                    placeholder="your main hero heading goes here..."
+                    placeholder="your activity description goes here..."
                     type="text"
                     value={addData.description}
                     onChange={(e) =>
-                        setAddData({ ...addData, description: e.target.value })
+                      setAddData({ ...addData, description: e.target.value })
                     }
                   />
                 </label>
@@ -198,9 +278,7 @@ const Page = () => {
                   <input
                     placeholder="your main hero heading goes here..."
                     type="file"
-                    onChange={(e) =>
-                      setimage({ ...image, image: e.target.files[0] })
-                    }
+                    onChange={(e) => handleFileChange(e, "feature")}
                   />
                 </label>
                 <label>
@@ -210,12 +288,7 @@ const Page = () => {
                   <input
                     placeholder="your main hero heading goes here..."
                     type="file"
-                    onChange={(e) =>
-                      setCoverImage({
-                        ...coverImage,
-                        coverImage: e.target.files[0],
-                      })
-                    }
+                    onChange={(e) => handleFileChange(e, "cover")}
                   />
                 </label>
               </div>
@@ -240,9 +313,13 @@ const Page = () => {
                 </div>
               </div>
               <div className={`video-box ${controls.view}`}>
-                {controls.view === "feature" && <img src="" alt="" />}
+                {controls.view === "feature" && (
+                  <img src={image.imagePrev} alt="" />
+                )}
 
-                {controls.view === "cover" && <img src="" alt="" />}
+                {controls.view === "cover" && (
+                  <img src={coverImage.coverImagePrev} alt="" />
+                )}
               </div>
             </div>
           </form>
