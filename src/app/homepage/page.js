@@ -11,14 +11,22 @@ function Page() {
   const [addData, setAddData] = useState({
     title: "",
     buttonText: "",
-    buttonLink: "",
-    description: "",
+    buttonLink: "/#activities",
+    description: null,
   });
 
-  const [image, setImage] = useState();
-  const [desktop, setDesktop] = useState();
-  const [tab, setTab] = useState();
-  const [mob, setMob] = useState();
+  const [desktop, setDesktop] = useState({
+    desktop: null,
+    desktopPrev: "",
+  });
+  const [tab, setTab] = useState({
+    tab: null,
+    tabPrev: "",
+  });
+  const [mob, setMob] = useState({
+    mob: null,
+    mobPrev: "",
+  });
 
   useEffect(() => {}, []);
 
@@ -37,24 +45,29 @@ function Page() {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/viedoAndAboutSection/get/1`
       );
-      console.log(response.data.data, "response");
 
       if (response.status === 200) {
         setAddData({
           title: response?.data?.data.title,
           buttonText: response?.data?.data.buttonText,
+          buttonLink: null,
+          description: null,
         });
-        setImage(response?.data?.data.image);
-        setDesktop(response?.data?.data?.viedo.desktop);
-        setTab(response?.data?.data?.viedo.tab);
-        setMob(response?.data?.data?.viedo.mob);
+
+        setDesktop({
+          desktopPrev: response?.data?.data?.viedo.desktop,
+        });
+        setTab({
+          tabPrev: response?.data?.data?.viedo.tab,
+        });
+        setMob({
+          mobPrev: response?.data?.data?.viedo.mob,
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  console.log(desktop, "desktop");
 
   useEffect(() => {
     getVideos();
@@ -62,13 +75,34 @@ function Page() {
 
   const updateVideos = async () => {
     try {
+      const formData = new FormData();
+
+      formData.append("data", JSON.stringify(addData));
+      formData.append("desktopVideo", desktop.desktop);
+      formData.append("tabVideo", tab.tab);
+      formData.append("mobVideo", mob.mob);
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/viedoAndAboutSection/update/1`,
-        addData
+        formData
       );
       getVideos();
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleFileChange = (event, type) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const fileURL = URL.createObjectURL(file);
+
+    if (type === "desktop") {
+      setDesktop({ desktop: file, desktopPrev: fileURL });
+    } else if (type === "tab") {
+      setTab({ tab: file, tabPrev: fileURL });
+    } else if (type === "mob") {
+      setMob({ mob: file, mobPrev: fileURL });
     }
   };
 
@@ -96,73 +130,68 @@ function Page() {
                   <p>HomePage Title *</p>
                   <div
                     className={`counter ${
-                      data?.title?.length > 49 ? "error" : ""
+                      addData?.title.length > 49 ? "error" : ""
                     }`}
                   >
-                    {data?.title?.length}/50 character
+                    {addData?.title.length}/50 characters
                   </div>
                 </div>
                 <input
-                  placeholder="your main hero heading goes here..."
+                  placeholder="Your main hero heading goes here..."
                   type="text"
                   value={addData.title}
-                  onChange={(e) =>
-                    setData({ ...addData, title: e.target.value })
-                  }
+                  onChange={(e) => {
+                    if (e.target.value.length <= 50) {
+                      setAddData({ ...addData, title: e.target.value });
+                    }
+                  }}
                 />
-                {data?.title?.length < 50 ? (
-                  <span> Please add a title for the hero section </span>
-                ) : (
+                {addData.title.length > 49 && (
                   <span className="error">
-                    please keep the title below 50 character
+                    Please keep the title below 50 characters
                   </span>
                 )}
               </label>
+
+              <div className="row"></div>
               <div className="row">
-                {/* <label>
-            <div className="top">
-              <p>Hero Button Link</p>
-            </div>
-            <select>
-              <option value=""></option>
-            </select>
-          </label> */}
-              </div>
-              <div className="row">
-                {/* <label>
-                  <div className="top">
-                    <p>Video Fallback</p>
-                  </div>
-                  <input
-                    type="file"
-                    onChange={(e) => setImage(e.target.files[0])}
-                  />
-                  <span className="error">stats</span>
-                </label> */}
                 <label>
                   <div className="top">
                     <p>Hero Button Text*</p>
-                    <div className="counter">10/10</div>
+                    <div
+                      className={`counter ${
+                        addData?.buttonText.length > 9 ? "error" : ""
+                      }`}
+                    >
+                      {addData?.buttonText.length}/10 characters
+                    </div>
                   </div>
                   <input
-                    placeholder="your main hero heading goes here..."
+                    placeholder="Enter hero button text..."
                     type="text"
                     value={addData.buttonText}
-                    onChange={(e) =>
-                      setData({ ...addData, buttonText: e.target.value })
-                    }
+                    onChange={(e) => {
+                      if (e.target.value.length <= 10) {
+                        setAddData({ ...addData, buttonText: e.target.value });
+                      }
+                    }}
                   />
-                  <span className="error">stats</span>
+                  {addData.buttonText.length > 9 && (
+                    <span className="error">
+                      Please keep the title below 10 characters
+                    </span>
+                  )}
                 </label>
+
                 <label>
                   <div className="top">
                     <p>Desktop Video</p>
                   </div>
                   <input
                     type="file"
-                    onChange={(e) => setDesktop(e.target.files[0])}
+                    onChange={(e) => handleFileChange(e, "desktop")}
                   />
-                  <span className="error">stats</span>
+                  {/* <span className="error">stats</span> */}
                 </label>
               </div>
               <div className="row">
@@ -172,9 +201,9 @@ function Page() {
                   </div>
                   <input
                     type="file"
-                    onChange={(e) => setTab(e.target.files[0])}
+                    onChange={(e) => handleFileChange(e, "tab")}
                   />
-                  <span className="error">stats</span>
+                  {/* <span className="error">stats</span> */}
                 </label>
                 <label>
                   <div className="top">
@@ -182,9 +211,9 @@ function Page() {
                   </div>
                   <input
                     type="file"
-                    onChange={(e) => setMob(e.target.files[0])}
+                    onChange={(e) => handleFileChange(e, "mob")}
                   />
-                  <span className="error">stats</span>
+                  {/* <span className="error">stats</span> */}
                 </label>
               </div>
             </div>
@@ -214,31 +243,25 @@ function Page() {
                 >
                   Tab
                 </div>
-                {/* <div
-            className={`option ${controls.view === "fi" ? "active" : ""}`}
-            onClick={() => setControls({ ...controls, view: "fi" })}
-          >
-            FallBack Image
-          </div> */}
               </div>
               <div className={`video-box ${controls.view}`}>
-                {controls.view === "desktop" && desktop && (
+                {controls.view === "desk" && desktop && (
                   <video controls width="100%">
-                    <source src={desktop} type="video/mp4" />
+                    <source src={desktop.desktopPrev} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
 
                 {controls.view === "mob" && mob && (
                   <video controls width="100%">
-                    <source src={mob} type="video/mp4" />
+                    <source src={mob.mobPrev} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
 
                 {controls.view === "tab" && tab && (
                   <video controls width="100%">
-                    <source src={tab} type="video/mp4" />
+                    <source src={tab.tabPrev} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
