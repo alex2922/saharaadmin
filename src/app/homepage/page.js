@@ -160,10 +160,10 @@ function Page() {
                     <p>Hero Button Text*</p>
                     <div
                       className={`counter ${
-                        addData?.buttonText.length > 9 ? "error" : ""
+                        addData?.buttonText.length >= 21 ? "error" : ""
                       }`}
                     >
-                      {addData?.buttonText.length}/10 characters
+                      {addData?.buttonText.length}/20 characters
                     </div>
                   </div>
                   <input
@@ -171,14 +171,14 @@ function Page() {
                     type="text"
                     value={addData.buttonText}
                     onChange={(e) => {
-                      if (e.target.value.length <= 10) {
+                      if (e.target.value.length <= 20) {
                         setAddData({ ...addData, buttonText: e.target.value });
                       }
                     }}
                   />
-                  {addData.buttonText.length > 9 && (
+                  {addData.buttonText.length >= 21 && (
                     <span className="error">
-                      Please keep the title below 10 characters
+                      Please keep the title below 20 characters
                     </span>
                   )}
                 </label>
