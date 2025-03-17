@@ -47,7 +47,7 @@ function Sidebar() {
     },
     {
       name: "Activity",
-      path: "/activity",
+      path: "/addActivity",
       icon: <AiOutlineProduct />,
     },
     {
