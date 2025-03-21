@@ -40,31 +40,36 @@ const page = () => {
     console.log(data);
   }, [data]);
 
-
-
-
   return (
     <>
       <ToastContainer />
-      {controls.confirm && <Confirmation
+      {controls.confirm && (
+        <Confirmation
           title={`are you sure?`}
           btnYes="No"
           btnNo="Yes"
           clickA={() => setControls({ ...controls, confirm: false })}
-          clickB={() =>{ updateAboutData(controls.title, controls.description, controls.btn_text, controls.img).then((data) => {
-            setControls({ ...controls, confirm: false });
-            toast.success("About Section Updated", {
-              position: "top-center",
-              autoClose: 500,
-              hideProgressBar: false,
-              closeOnClick: false,
-              theme: isDarkMode ? "dark" : "light",
+          clickB={() => {
+            updateAboutData(
+              controls.title,
+              controls.description,
+              controls.btn_text,
+              controls.img
+            ).then((data) => {
+              setControls({ ...controls, confirm: false });
+              toast.success("About Section Updated", {
+                position: "top-center",
+                autoClose: 500,
+                hideProgressBar: false,
+                closeOnClick: false,
+                theme: isDarkMode ? "dark" : "light",
+              });
             });
-          })}}
+          }}
         >
           <p> once updated the previous data will be lost...</p>
-          
-          </Confirmation>}
+        </Confirmation>
+      )}
 
       <div className="parent about">
         <div className="container about-container ">
@@ -74,7 +79,12 @@ const page = () => {
               <h2>About Section Content </h2>
             </div>
             <div className="btns ">
-              <button className="btn" onClick={()=>setControls({ ...controls, confirm: true })} >Update</button>
+              <button
+                className="btn"
+                onClick={() => setControls({ ...controls, confirm: true })}
+              >
+                Update
+              </button>
               <button className="btn2">Refresh Data</button>
             </div>
           </div>
@@ -181,14 +191,11 @@ const page = () => {
                       ];
                       if (!validTypes.includes(file.type)) {
                         setControls((prev) => ({ ...prev, imgalert: 2 }));
-                        toast.error(
-                          "Upload prohibited",
-                          {
-                            position: "top-center",
-                            autoClose: 500,
-                            theme: isDarkMode ? "dark" : "light",
-                          }
-                        );
+                        toast.error("Upload prohibited", {
+                          position: "top-center",
+                          autoClose: 500,
+                          theme: isDarkMode ? "dark" : "light",
+                        });
                         return;
                       }
 
@@ -212,14 +219,11 @@ const page = () => {
                         img.onload = () => {
                           if (img.width < 1080 || img.height < 1080) {
                             setControls((prev) => ({ ...prev, imgalert: 1 }));
-                            toast.error(
-                              "Upload prohibited",
-                              {
-                                position: "top-center",
-                                autoClose: 500,
-                                theme: isDarkMode ? "dark" : "light",
-                              }
-                            );
+                            toast.error("Upload prohibited", {
+                              position: "top-center",
+                              autoClose: 500,
+                              theme: isDarkMode ? "dark" : "light",
+                            });
                             return;
                           }
 

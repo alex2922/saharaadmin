@@ -51,6 +51,11 @@ function Sidebar() {
       icon: <AiOutlineProduct />,
     },
     {
+      name: "Promo Activities",
+      path: "/addPromotionalActivities",
+      icon: <AiOutlineProduct />,
+    },
+    {
       name: "FAQs",
       path: "/faq",
       icon: <FaQuora />,

@@ -105,7 +105,7 @@ const Page = () => {
         );
       }
 
-      console.log(response)
+   
       if (response.status === 201) {
        router.push("/activity")
       }

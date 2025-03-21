@@ -87,11 +87,11 @@ setDeletepop(true)
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Message</th>
-                    <th>Activity</th>
+                    <th>Title</th>
+                    <th>Activity Title</th>
+                    <th>Description</th>
+                    <th>Feature Image</th>
+                    <th>Cover Image</th>
                     {/* <th>Status</th> */}
                     <th>Actions</th>
                   </tr>

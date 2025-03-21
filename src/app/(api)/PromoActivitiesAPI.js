@@ -1,7 +1,9 @@
+
+
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-export const getActivity = async () => {
+export const getpromoActivity = async () => {
   try {
-    const response = await fetch(`${baseUrl}/activity/GetAll`, {
+    const response = await fetch(`${baseUrl}/PramotionalActivity/GetAll`, {
       method: "GET",
     });
     const jsonData = await response.json();
@@ -12,3 +14,4 @@ export const getActivity = async () => {
 };
 
 
+ 
