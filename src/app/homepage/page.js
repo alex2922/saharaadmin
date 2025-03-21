@@ -55,13 +55,13 @@ function Page() {
         });
 
         setDesktop({
-          desktopPrev: response?.data?.data?.viedo.desktop,
+          desktopPrev: response?.data.data.viedo.desktop,
         });
         setTab({
-          tabPrev: response?.data?.data?.viedo.tab,
+          tabPrev: response?.data.data.viedo.tab,
         });
         setMob({
-          mobPrev: response?.data?.data?.viedo.mob,
+          mobPrev: response?.data.data.viedo.mob,
         });
       }
     } catch (error) {
@@ -245,21 +245,21 @@ function Page() {
                 </div>
               </div>
               <div className={`video-box ${controls.view}`}>
-                {controls.view === "desk" && desktop && (
+                {controls.view === "desk" && desktop.desktopPrev && (
                   <video controls width="100%">
                     <source src={desktop.desktopPrev} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
 
-                {controls.view === "mob" && mob && (
+                {controls.view === "mob" && mob.mobPrev && (
                   <video controls width="100%">
                     <source src={mob.mobPrev} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
 
-                {controls.view === "tab" && tab && (
+                {controls.view === "tab" && tab.tabPrev && (
                   <video controls width="100%">
                     <source src={tab.tabPrev} type="video/mp4" />
                     Your browser does not support the video tag.
