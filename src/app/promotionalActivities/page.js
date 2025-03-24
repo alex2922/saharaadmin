@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import "./promotionalActivities.scss";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 
 import { useRouter, useSearchParams } from "next/navigation";
 const Page = () => {
@@ -54,6 +53,8 @@ const Page = () => {
   }, [id]);
 
   const validate = () => {
+
+    if (id) return true;
     let errors = {};
 
     if (!controls.title.trim()) errors.title = "Title is required";
@@ -101,8 +102,6 @@ const Page = () => {
 
   return (
     <>
-      <ToastContainer />
-
       <div className="parent promotional-activities">
         <div className="container promotional-activities-container">
           <div className="header">

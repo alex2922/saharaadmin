@@ -59,7 +59,7 @@ const Page = () => {
         <div className="contacts-container activity-cont container">
           <div className="header">
             <div className="title">
-              <h2>Promo Activites Page</h2>
+              <h2>Promotional Activites</h2>
             </div>
             <div className="btns">
               <a href="/promotionalActivities" className="btn">

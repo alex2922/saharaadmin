@@ -51,7 +51,7 @@ function Sidebar() {
       icon: <AiOutlineProduct />,
     },
     {
-      name: "Promo Activities",
+      name: "Promotional",
       path: "/addPromotionalActivities",
       icon: <AiOutlineProduct />,
     },
