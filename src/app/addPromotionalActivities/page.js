@@ -5,27 +5,17 @@ import { getpromoActivity } from "../(api)/PromoActivitiesAPI";
 import axios from "axios";
 import Confirmation from "../(comps)/confirmation/Confirmation";
 
-
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activityData, setActivityData] = useState([]);
-  const [addData, setAddData] = useState({
-    title: "",
-    image: "",
-    description: "",
-  });
 
-  const [image, setimage] = useState({
-    image: null,
-    imagePrev: "",
-  });
 
   const [deletepop, setDeletepop] = useState(false);
   useEffect(() => {
     setIsLoading(true);
     getpromoActivity()
       .then((data) => {
-        setActivityData(data);
+        setActivityData(data.reverse());
       })
       .finally(() => {
         setIsLoading(false);
@@ -36,7 +26,7 @@ const Page = () => {
     try {
       const id = localStorage.getItem("id");
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/PramotionalActivity/delete=${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/PramotionalActivity/delete/${id}`
       );
 
       localStorage.removeItem("id");
@@ -53,9 +43,6 @@ const Page = () => {
 
     setDeletepop(true);
   };
-
-
-
 
   return (
     <>
@@ -75,9 +62,8 @@ const Page = () => {
               <h2>Promo Activites Page</h2>
             </div>
             <div className="btns">
-              <a href="/promotionalActivities"
-              className="btn">
-               Add
+              <a href="/promotionalActivities" className="btn">
+                Add
               </a>
               <button
                 className="btn2"
@@ -98,33 +84,37 @@ const Page = () => {
           </div>
           <div className="table-box">
             {!isLoading ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {activityData &&
-                    activityData.map((item, index) => (
+            activityData &&  activityData.length > 0 ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Image</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activityData && activityData.map((item, index) => (
                       <tr key={index}>
-                        <td>{item.data.paId}</td>
-                        <td>{item.data.title}</td>
-                        <td>{item.data.description}</td>
+                        <td>{index + 1 || "N/A"}</td>
+                        <td>{item?.data?.title || "N/A"}</td>
+                        <td>{item?.data?.description || "N/A"}</td>
                         <td>
-                          {" "}
-                          <img
-                            src={item.data.image}
-                            style={{
-                              width: "100px",
-                              height: "100px",
-                              objectFit: "cover",
-                            }}
-                          />
+                          {item?.data?.image ? (
+                            <img
+                              src={item.data.image}
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                objectFit: "cover",
+                              }}
+                              alt="Promo"
+                            />
+                          ) : (
+                            "No Image"
+                          )}
                         </td>
                         <td
                           style={{
@@ -137,22 +127,34 @@ const Page = () => {
                           }}
                         >
                           <a
-                            href={`promotionalActivities?acivityId=${item.data.paId}`}
+                            href={`promotionalActivities?acivityId=${item?.data?.paId}`}
                             className="btn2"
                           >
                             Edit
                           </a>
                           <button
                             className="btn2"
-                            onClick={() => openPop(item.data.paId)}
+                            onClick={() => openPop(item?.data?.paId)}
                           >
                             Delete
                           </button>
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              ) : (
+                <p
+                  className="no-data"
+                  style={{
+                    textAlign: "center",
+                    fontSize: "18px",
+                    marginTop: "20px",
+                  }}
+                >
+                  Data is not available
+                </p>
+              )
             ) : (
               <p className="loading">Fetching contact requests...</p>
             )}

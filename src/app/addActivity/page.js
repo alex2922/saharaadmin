@@ -80,15 +80,16 @@ const Page = () => {
   }, [keyValuePairs]);
 
   const addActivity = async () => {
+    if (!validate()) return;
     try {
       const formdata = new FormData();
 
       if (id) {
         formdata.append("data", JSON.stringify({ ...addData, aid: id }));
-      }else{
+      } else {
         formdata.append("data", JSON.stringify(addData));
       }
-     
+
       formdata.append("image", image.image);
       formdata.append("coverImage", coverImage.coverImage);
       let response;
@@ -105,9 +106,8 @@ const Page = () => {
         );
       }
 
-   
       if (response.status === 201) {
-       router.push("/activity")
+        router.push("/activity");
       }
     } catch (error) {
       console.log(error);
@@ -126,12 +126,12 @@ const Page = () => {
       });
 
       setimage({
-        image:null,
+        image: null,
         imagePrev: response.data.data.image,
       });
 
       setCoverImage({
-        coverImage:null,
+        coverImage: null,
         coverImagePrev: response.data.data.coverImage,
       });
       const additionalInfoArray = Object.entries(
@@ -152,6 +152,69 @@ const Page = () => {
       getActivtyData(id);
     }
   }, [id]);
+
+  const [error, setError] = useState({
+    title: "",
+    activityTitle: "",
+    description: "",
+  });
+
+  const validate = () => {
+    let errors = {};
+
+    if (!addData.title.trim()) errors.title = "title is required";
+    else if (addData.title.length > 50) errors.title = "title is too long";
+
+    if (!addData.description.trim())
+      errors.description = "description is required";
+    else if (addData.description.length > 550)
+      errors.description = "description is too long";
+
+    if (!addData.activityTitle.trim())
+      errors.activityTitle = "activity title is required";
+    else if (addData.description.length > 550)
+      errors.activityTitle = "activity title is too long";
+
+    if (keyValuePairs.length < 3)
+      errors.additionalInfo =
+        "At least 3 activity key-value pairs are required";
+
+    keyValuePairs.forEach((pair, index) => {
+      if (!pair.key.trim()) errors[`key_${index}`] = "Key is required";
+      else if (pair.key.length > 50) errors[`key_${index}`] = "Key is too long";
+
+      if (!pair.value.trim()) errors[`value_${index}`] = "Value is required";
+      else if (pair.value.length > 200)
+        errors[`value_${index}`] = "Value is too long";
+    });
+
+    if (!image.image) {
+      errors.image = "Feature image is required";
+    } else {
+      const allowedFormats = ["image/jpeg", "image/png", "image/jpg"];
+      if (!allowedFormats.includes(image.image.type)) {
+        errors.image = "Feature image must be in JPG, PNG, or JPEG format";
+      }
+      if (image.image.size > 5 * 1024 * 1024) {
+        errors.image = "Feature image must be less than 5MB";
+      }
+    }
+
+    if (!coverImage.coverImage) {
+      errors.coverImage = "Cover image is required";
+    } else {
+      const allowedFormats = ["image/jpeg", "image/png", "image/jpg"];
+      if (!allowedFormats.includes(coverImage.coverImage.type)) {
+        errors.coverImage = "Cover image must be in JPG, PNG, or JPEG format";
+      }
+      if (coverImage.coverImage.size > 5 * 1024 * 1024) {
+        errors.coverImage = "Cover image must be less than 5MB";
+      }
+    }
+
+    setError(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   return (
     <>
@@ -184,6 +247,7 @@ const Page = () => {
                       setAddData({ ...addData, title: e.target.value })
                     }
                   />
+                  {error.title && <span className="error">{error.title}</span>}
                 </label>
                 <label>
                   <div className="top">
@@ -204,6 +268,9 @@ const Page = () => {
                       setAddData({ ...addData, activityTitle: e.target.value })
                     }
                   />
+                  {error.activityTitle && (
+                    <span className="error">{error.activityTitle}</span>
+                  )}
                 </label>
               </div>
               <div className="row">
@@ -220,6 +287,9 @@ const Page = () => {
                       setAddData({ ...addData, description: e.target.value })
                     }
                   />
+                  {error.description && (
+                    <span className="error">{error.description}</span>
+                  )}
                 </label>
               </div>
               {keyValuePairs.map((pair, index) => (
@@ -237,8 +307,9 @@ const Page = () => {
                         handleInputChange(index, "key", e.target.value)
                       }
                     />
+                     {error[`key_${index}`] && <span className="error">{error[`key_${index}`]}</span>}
                   </label>
-
+                  
                   <label>
                     <div className="top">
                       <p>Activity Value*</p>
@@ -267,7 +338,9 @@ const Page = () => {
                         </div>
                       )}
                     </div>
+                    {error[`value_${index}`] && <span className="error">{error[`value_${index}`]}</span>}
                   </label>
+                
                 </div>
               ))}
               <div className="row">
@@ -280,6 +353,7 @@ const Page = () => {
                     type="file"
                     onChange={(e) => handleFileChange(e, "feature")}
                   />
+                {error.image && <span className="error">{error.image}</span>}
                 </label>
                 <label>
                   <div className="top">
@@ -290,7 +364,9 @@ const Page = () => {
                     type="file"
                     onChange={(e) => handleFileChange(e, "cover")}
                   />
+                    {error.coverImage && <span className="error">{error.coverImage}</span>}
                 </label>
+              
               </div>
             </div>
             <div className="right">

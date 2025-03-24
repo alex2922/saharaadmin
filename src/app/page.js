@@ -64,13 +64,13 @@ export default function Home() {
               number={<CountUp end={6} duration={2} />}
               desc="Activities"
             />
-            <Card 
+            {/* <Card 
               link="/addPromotionalActivities"
               className="card1"
               title="Add Promotional Activities"
               number={<CountUp end={6} duration={2} />}
               desc="Promotional Activities"
-            />
+            /> */}
             <Card link="/about" className="card2" title="About Page" />
             <Card
               link="/testimonials"

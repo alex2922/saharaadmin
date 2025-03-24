@@ -9,7 +9,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activityData, setActivityData] = useState([]);
 
-const [deletepop,setDeletepop] = useState(false)
+  const [deletepop, setDeletepop] = useState(false);
   useEffect(() => {
     setIsLoading(true); // Set loading state before fetching data
     getActivity()
@@ -27,30 +27,30 @@ const [deletepop,setDeletepop] = useState(false)
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/activity/delete?activityId=${id}`
       );
-     
+
       localStorage.removeItem("id");
       setDeletepop(false);
       window.location.reload();
-      getActivity()
+      getActivity();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const openPop = (id)=>{
-localStorage.setItem("id", id);
+  const openPop = (id) => {
+    localStorage.setItem("id", id);
 
-setDeletepop(true)
-  }
+    setDeletepop(true);
+  };
 
   return (
     <>
-   {deletepop && (
+      {deletepop && (
         <Confirmation
           btnYes="Cancel"
           btnNo="Delete"
           title="Confirm Deletion"
-          clickA={()=>setDeletepop(false)}
+          clickA={() => setDeletepop(false)}
           clickB={deleteActivity}
         />
       )}
@@ -97,57 +97,61 @@ setDeletepop(true)
                   </tr>
                 </thead>
                 <tbody>
-                  {activityData && activityData.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.data.aid}</td>
-                      <td>{item.data.title}</td>
-                      <td>{item.data.activityTitle}</td>
-                      <td>{item.data.description}</td>
-                      <td>
-                        {" "}
-                        <img
-                          src={item.data.image}
-                       
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                          }}
-                        />{" "}
-                      </td>
-                      <td>
-                        {" "}
-                        <img
-                          src={item.data.coverImage}
-            
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                          }}
-                        />{" "}
-                      </td>
+                  {activityData &&
+                    activityData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.data.aid}</td>
+                        <td>{item.data.title}</td>
+                        <td>{item.data.activityTitle}</td>
+                        <td>{item.data.description}</td>
+                        <td>
+                          {" "}
+                          <img
+                            src={item.data.image}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                            }}
+                          />{" "}
+                        </td>
+                        <td>
+                          {" "}
+                          <img
+                            src={item.data.coverImage}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                            }}
+                          />{" "}
+                        </td>
 
-                      <td
-                        style={{
-                          display: "flex",
-                          gap: "0.5rem",
-                          height: "100%",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <a
-                          href={`/addActivity?acivityId=${item.data.aid}`}
-                          className="btn2"
+                        <td
+                          style={{
+                            display: "flex",
+                            gap: "0.5rem",
+                            height: "100%",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
                         >
-                          Edit
-                        </a>
-                        <button className="btn2" onClick={()=>openPop(item.data.aid)}  >Delete</button>
-                      </td>
-                    </tr>
-                  ))}
+                          <a
+                            href={`/addActivity?acivityId=${item.data.aid}`}
+                            className="btn2"
+                          >
+                            Edit
+                          </a>
+                          <button
+                            className="btn2"
+                            onClick={() => openPop(item.data.aid)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             ) : (
