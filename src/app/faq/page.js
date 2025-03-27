@@ -45,7 +45,7 @@ const Page = () => {
 
     return errors;
   };
-
+ 
   console.log(error, "error");
 
   const getdata = () => {
