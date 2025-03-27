@@ -18,6 +18,7 @@ import { MdTextSnippet } from "react-icons/md";
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
 import { Tooltip as ReactTooltip } from 'react-tooltip'
+import { PiMegaphone } from "react-icons/pi";
 
 function Sidebar() {
   const { isDarkMode, toggleTheme } = ThemeStore();
@@ -53,7 +54,7 @@ function Sidebar() {
     {
       name: "Promotional",
       path: "/addPromotionalActivities",
-      icon: <AiOutlineProduct />,
+      icon: <PiMegaphone />,
     },
     {
       name: "FAQs",
