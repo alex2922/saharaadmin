@@ -6,10 +6,11 @@ import { LuMinus } from "react-icons/lu";
 import "./addActivity.scss";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 const Page = () => {
-  const [errors, setErrors] = useState({});
   const searchParams = useSearchParams();
+  
   const id = searchParams.get("acivityId");
   const router = useRouter();
   const [addData, setAddData] = useState({
@@ -218,189 +219,204 @@ const Page = () => {
 
   return (
     <>
-      <div className="parent homepage">
-        <div className="container homepage-container ">
-          <div className="header">
-            <div className="title">
-              <div className="back"></div>
-              <h2>Add Acitivty Page Content </h2>
-            </div>
-            <div className="btns">
-              <button className="btn " onClick={addActivity}>
-                {id ? "Update" : "Save"}
-              </button>
-              <button className="btn2 ">Reset</button>
-            </div>
-          </div>
-          <form>
-            <div className="left">
-              <div className="row">
-                <label>
-                  <div className="top">
-                    <p>Title *</p>
-                  </div>
-                  <input
-                    placeholder="your activity title goes here..."
-                    type="text"
-                    value={addData.title}
-                    onChange={(e) =>
-                      setAddData({ ...addData, title: e.target.value })
-                    }
-                  />
-                  {error.title && <span className="error">{error.title}</span>}
-                </label>
-                <label>
-                  <div className="top">
-                    <p>Activity Title *</p>
-                    <div
-                      className={`counter ${
-                        addData?.title?.length > 49 ? "error" : ""
-                      }`}
-                    >
-                      {addData?.title?.length}/50 character
-                    </div>
-                  </div>
-                  <input
-                    placeholder="your main activity title goes here..."
-                    type="text"
-                    value={addData.activityTitle}
-                    onChange={(e) =>
-                      setAddData({ ...addData, activityTitle: e.target.value })
-                    }
-                  />
-                  {error.activityTitle && (
-                    <span className="error">{error.activityTitle}</span>
-                  )}
-                </label>
+
+        <div className="parent homepage">
+          <div className="container homepage-container ">
+            <div className="header">
+              <div className="title">
+                <div className="back"></div>
+                <h2>Add Acitivty Page Content </h2>
               </div>
-              <div className="row">
-                <label>
-                  <div className="top">
-                    <p>Activity Description*</p>
-                    <div className="counter">10/10</div>
-                  </div>
-                  <textarea
-                    placeholder="your activity description goes here..."
-                    type="text"
-                    value={addData.description}
-                    onChange={(e) =>
-                      setAddData({ ...addData, description: e.target.value })
-                    }
-                  />
-                  {error.description && (
-                    <span className="error">{error.description}</span>
-                  )}
-                </label>
+              <div className="btns">
+                <button className="btn " onClick={addActivity}>
+                  {id ? "Update" : "Save"}
+                </button>
+                <button className="btn2 ">Reset</button>
               </div>
-              {keyValuePairs.map((pair, index) => (
-                <div className="row" key={index}>
+            </div>
+            <form>
+              <div className="left">
+                <div className="row">
                   <label>
                     <div className="top">
-                      <p>Activity Key*</p>
-                      <div className="counter">10/10</div>
+                      <p>Title *</p>
                     </div>
                     <input
+                      placeholder="your activity title goes here..."
                       type="text"
-                      placeholder="Enter key"
-                      value={pair.key}
+                      value={addData.title}
                       onChange={(e) =>
-                        handleInputChange(index, "key", e.target.value)
+                        setAddData({ ...addData, title: e.target.value })
                       }
                     />
-                     {error[`key_${index}`] && <span className="error">{error[`key_${index}`]}</span>}
+                    {error.title && (
+                      <span className="error">{error.title}</span>
+                    )}
                   </label>
-                  
                   <label>
                     <div className="top">
-                      <p>Activity Value*</p>
+                      <p>Activity Title *</p>
+                      <div
+                        className={`counter ${
+                          addData?.title?.length > 49 ? "error" : ""
+                        }`}
+                      >
+                        {addData?.title?.length}/50 character
+                      </div>
+                    </div>
+                    <input
+                      placeholder="your main activity title goes here..."
+                      type="text"
+                      value={addData.activityTitle}
+                      onChange={(e) =>
+                        setAddData({
+                          ...addData,
+                          activityTitle: e.target.value,
+                        })
+                      }
+                    />
+                    {error.activityTitle && (
+                      <span className="error">{error.activityTitle}</span>
+                    )}
+                  </label>
+                </div>
+                <div className="row">
+                  <label>
+                    <div className="top">
+                      <p>Activity Description*</p>
                       <div className="counter">10/10</div>
                     </div>
-                    <div className="append_button">
+                    <textarea
+                      placeholder="your activity description goes here..."
+                      type="text"
+                      value={addData.description}
+                      onChange={(e) =>
+                        setAddData({ ...addData, description: e.target.value })
+                      }
+                    />
+                    {error.description && (
+                      <span className="error">{error.description}</span>
+                    )}
+                  </label>
+                </div>
+                {keyValuePairs.map((pair, index) => (
+                  <div className="row" key={index}>
+                    <label>
+                      <div className="top">
+                        <p>Activity Key*</p>
+                        <div className="counter">10/10</div>
+                      </div>
                       <input
                         type="text"
-                        placeholder="Enter value"
-                        value={pair.value}
+                        placeholder="Enter key"
+                        value={pair.key}
                         onChange={(e) =>
-                          handleInputChange(index, "value", e.target.value)
+                          handleInputChange(index, "key", e.target.value)
                         }
                       />
-                      <div className="plus_button" onClick={handleAddRow}>
-                        {" "}
-                        <GoPlus />{" "}
-                      </div>
-                      {index > 0 && (
-                        <div
-                          className="minus_button"
-                          onClick={() => handleRemoveRow(index)}
-                        >
-                          {" "}
-                          <LuMinus />{" "}
-                        </div>
+                      {error[`key_${index}`] && (
+                        <span className="error">{error[`key_${index}`]}</span>
                       )}
-                    </div>
-                    {error[`value_${index}`] && <span className="error">{error[`value_${index}`]}</span>}
-                  </label>
-                
-                </div>
-              ))}
-              <div className="row">
-                <label>
-                  <div className="top">
-                    <p>Feature Image *</p>
-                  </div>
-                  <input
-                    placeholder="your main hero heading goes here..."
-                    type="file"
-                    onChange={(e) => handleFileChange(e, "feature")}
-                  />
-                {error.image && <span className="error">{error.image}</span>}
-                </label>
-                <label>
-                  <div className="top">
-                    <p>Cover Image *</p>
-                  </div>
-                  <input
-                    placeholder="your main hero heading goes here..."
-                    type="file"
-                    onChange={(e) => handleFileChange(e, "cover")}
-                  />
-                    {error.coverImage && <span className="error">{error.coverImage}</span>}
-                </label>
-              
-              </div>
-            </div>
-            <div className="right">
-              <div className="video-select">
-                <div
-                  className={`option ${
-                    controls.view === "feature" ? "active" : ""
-                  }`}
-                  onClick={() => setControls({ ...controls, view: "feature" })}
-                >
-                  Feature Image
-                </div>
-                <div
-                  className={`option ${
-                    controls.view === "cover" ? "active" : ""
-                  }`}
-                  onClick={() => setControls({ ...controls, view: "cover" })}
-                >
-                  Cover Image
-                </div>
-              </div>
-              <div className={`video-box ${controls.view}`}>
-                {controls.view === "feature" && (
-                  <img src={image.imagePrev} alt="" />
-                )}
+                    </label>
 
-                {controls.view === "cover" && (
-                  <img src={coverImage.coverImagePrev} alt="" />
-                )}
+                    <label>
+                      <div className="top">
+                        <p>Activity Value*</p>
+                        <div className="counter">10/10</div>
+                      </div>
+                      <div className="append_button">
+                        <input
+                          type="text"
+                          placeholder="Enter value"
+                          value={pair.value}
+                          onChange={(e) =>
+                            handleInputChange(index, "value", e.target.value)
+                          }
+                        />
+                        <div className="plus_button" onClick={handleAddRow}>
+                          {" "}
+                          <GoPlus />{" "}
+                        </div>
+                        {index > 0 && (
+                          <div
+                            className="minus_button"
+                            onClick={() => handleRemoveRow(index)}
+                          >
+                            {" "}
+                            <LuMinus />{" "}
+                          </div>
+                        )}
+                      </div>
+                      {error[`value_${index}`] && (
+                        <span className="error">{error[`value_${index}`]}</span>
+                      )}
+                    </label>
+                  </div>
+                ))}
+                <div className="row">
+                  <label>
+                    <div className="top">
+                      <p>Feature Image *</p>
+                    </div>
+                    <input
+                      placeholder="your main hero heading goes here..."
+                      type="file"
+                      onChange={(e) => handleFileChange(e, "feature")}
+                    />
+                    {error.image && (
+                      <span className="error">{error.image}</span>
+                    )}
+                  </label>
+                  <label>
+                    <div className="top">
+                      <p>Cover Image *</p>
+                    </div>
+                    <input
+                      placeholder="your main hero heading goes here..."
+                      type="file"
+                      onChange={(e) => handleFileChange(e, "cover")}
+                    />
+                    {error.coverImage && (
+                      <span className="error">{error.coverImage}</span>
+                    )}
+                  </label>
+                </div>
               </div>
-            </div>
-          </form>
+              <div className="right">
+                <div className="video-select">
+                  <div
+                    className={`option ${
+                      controls.view === "feature" ? "active" : ""
+                    }`}
+                    onClick={() =>
+                      setControls({ ...controls, view: "feature" })
+                    }
+                  >
+                    Feature Image
+                  </div>
+                  <div
+                    className={`option ${
+                      controls.view === "cover" ? "active" : ""
+                    }`}
+                    onClick={() => setControls({ ...controls, view: "cover" })}
+                  >
+                    Cover Image
+                  </div>
+                </div>
+                <div className={`video-box ${controls.view}`}>
+                  {controls.view === "feature" && image.imagePrev && (
+                    <Image src={image.imagePrev} alt="image" />
+                  )}
+
+                  {controls.view === "cover" && coverImage.coverImagePrev && (
+                    <Image src={coverImage.coverImagePrev} alt="image" />
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+    
     </>
   );
 };

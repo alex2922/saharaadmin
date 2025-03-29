@@ -15,9 +15,9 @@ import { FaQuora } from "react-icons/fa6";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdVideoLibrary } from "react-icons/md";
 import { MdTextSnippet } from "react-icons/md";
-import 'react-tooltip/dist/react-tooltip.css'
-import { Tooltip } from 'react-tooltip'
-import { Tooltip as ReactTooltip } from 'react-tooltip'
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import { PiMegaphone } from "react-icons/pi";
 
 function Sidebar() {
@@ -68,6 +68,11 @@ function Sidebar() {
     },
   ];
 
+  const handleLogout = () => {
+    localStorage.removeItem("id");
+    window.location.href = "/login";
+  };
+
   return (
     <>
       <Tooltip id="my-tooltip" />
@@ -75,9 +80,16 @@ function Sidebar() {
         <div className="links">
           <div className="top">
             <h3>
-              {sidebar ? <> Sahara
-                <br />
-                Amusement</> : <></>}
+              {sidebar ? (
+                <>
+                  {" "}
+                  Sahara
+                  <br />
+                  Amusement
+                </>
+              ) : (
+                <></>
+              )}
             </h3>
             <button
               className={sidebar ? "btn3 active" : "btn3 "}
@@ -92,27 +104,41 @@ function Sidebar() {
               key={index}
               className={pathname === link.path ? "active" : ""}
               href={link.path}
-              {...(sidebar ? {} : { "data-tooltip-id": "my-tooltip", "data-tooltip-content": link.name })}
+              {...(sidebar
+                ? {}
+                : {
+                    "data-tooltip-id": "my-tooltip",
+                    "data-tooltip-content": link.name,
+                  })}
             >
-
-
-              <span>
-                {link.icon}
-              </span>
+              <span>{link.icon}</span>
 
               {sidebar && link.name}
             </Link>
           ))}
         </div>
         <div className="btns">
-          {sidebar ? <button className="btn"> <span><HiOutlineLogout /> </span>Logout</button> :
-            <button className="btn"> <span><HiOutlineLogout /> </span></button>}
+          {sidebar ? (
+            <button className="btn" onClick={() => handleLogout()}>
+              {" "}
+              <span>
+                <HiOutlineLogout />{" "}
+              </span>
+              Logout
+            </button>
+          ) : (
+            <button className="btn">
+              {" "}
+              <span>
+                <HiOutlineLogout />{" "}
+              </span>
+            </button>
+          )}
           <button className="btn2" onClick={toggleTheme}>
             {isDarkMode ? <MdDarkMode /> : <MdSunny />}
           </button>
         </div>
       </div>
-
     </>
   );
 }

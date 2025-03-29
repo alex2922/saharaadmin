@@ -7,7 +7,7 @@ import { getAboutData, updateAboutData } from "../(api)/aboutApi";
 import { ToastContainer, toast } from "react-toastify";
 import "./about.scss";
 
-const page = () => {
+const Page = () => {
   const { isDarkMode } = ThemeStore();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -275,4 +275,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
