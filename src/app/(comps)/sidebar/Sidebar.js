@@ -127,7 +127,7 @@ function Sidebar() {
               Logout
             </button>
           ) : (
-            <button className="btn">
+            <button className="btn" onClick={() => handleLogout()}>
               {" "}
               <span>
                 <HiOutlineLogout />{" "}
