@@ -120,6 +120,9 @@ const Page = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/activity/getById?activityId=${id}`
       );
 
+      console.log(response,">>>>response");
+      
+
       setAddData({
         title: response.data.data.title,
         activityTitle: response.data.data.activityTitle,
@@ -216,6 +219,10 @@ const Page = () => {
     setError(errors);
     return Object.keys(errors).length === 0;
   };
+
+
+  console.log("hello rishabh");
+  
 
   return (
     <>

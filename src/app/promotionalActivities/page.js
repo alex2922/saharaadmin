@@ -53,7 +53,6 @@ const Page = () => {
   }, [id]);
 
   const validate = () => {
-
     if (id) return true;
     let errors = {};
 

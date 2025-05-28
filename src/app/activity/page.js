@@ -4,75 +4,94 @@ import React, { useEffect, useState } from "react";
 import { getActivity } from "../(api)/ActivityApi";
 import axios from "axios";
 import Confirmation from "../(comps)/confirmation/Confirmation";
+import Link from "next/link";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [activityData, setActivityData] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [pendingId, setPendingId] = useState(null);
 
-  const [deletepop, setDeletepop] = useState(false);
-  useEffect(() => {
-    setIsLoading(true); // Set loading state before fetching data
+  // replace this with your own dark-mode flag / context
+  const isDarkMode = false;
+
+  /* ---------- data helpers ---------- */
+  const loadData = () => {
+    setIsLoading(true);
     getActivity()
-      .then((data) => {
-        setActivityData(data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+      .then(setActivities)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
+  
 
   const deleteActivity = async () => {
+    if (!pendingId) return;
     try {
-      const id = localStorage.getItem("id");
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/activity/delete?activityId=${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/activity/delete?activityId=${pendingId}`
       );
-
-      localStorage.removeItem("id");
-      setDeletepop(false);
-      window.location.reload();
-      getActivity();
-    } catch (error) {
-      console.log(error);
+      toast.success("Activity deleted", {
+        position: "top-center",
+        autoClose: 2000,
+        theme: isDarkMode ? "dark" : "light",
+      });
+      setShowConfirm(false);
+      setPendingId(null);
+      loadData(); // refresh list in place
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not delete activity", {
+        position: "top-center",
+        autoClose: 2000,
+        theme: isDarkMode ? "dark" : "light",
+      });
     }
   };
 
-  const openPop = (id) => {
-    localStorage.setItem("id", id);
+  /* ---------- life-cycle ---------- */
+  useEffect(loadData, []);
 
-    setDeletepop(true);
+  /* ---------- helpers ---------- */
+  const openConfirm = (aid) => {
+    setPendingId(aid);
+    setShowConfirm(true);
   };
 
+  /* ---------- JSX ---------- */
   return (
     <>
-      {deletepop && (
+      {showConfirm && (
         <Confirmation
+          title="Confirm Deletion"
           btnYes="Cancel"
           btnNo="Delete"
-          title="Confirm Deletion"
-          clickA={() => setDeletepop(false)}
+          clickA={() => setShowConfirm(false)}
           clickB={deleteActivity}
         />
       )}
+
       <div className="contacts activity parent">
         <div className="contacts-container activity-cont container">
-          <div className="header">
+          <header className="header">
             <div className="title">
-              <h2>Activites Page</h2>
+              <h2>Activities Page</h2>
             </div>
+
             <div className="btns">
-              <a href="/addActivity" className="btn">
+              <Link href="/addActivity" className="btn">
                 Add Activity
-              </a>
+              </Link>
               <button
+                type="button"
                 className="btn2"
                 onClick={() => {
                   loadData();
-                  toast.info("All Latest Contacts Fetched", {
+                  toast.info("List refreshed", {
                     position: "top-center",
                     autoClose: 500,
-                    hideProgressBar: false,
-                    closeOnClick: false,
                     theme: isDarkMode ? "dark" : "light",
                   });
                 }}
@@ -80,9 +99,12 @@ const Page = () => {
                 Refresh Data
               </button>
             </div>
-          </div>
+          </header>
+
           <div className="table-box">
-            {!isLoading ? (
+            {isLoading ? (
+              <p className="loading">Fetching activities…</p>
+            ) : activities.length ? (
               <table>
                 <thead>
                   <tr>
@@ -90,72 +112,72 @@ const Page = () => {
                     <th>Title</th>
                     <th>Activity Title</th>
                     <th>Description</th>
-                    <th>Feature Image</th>
-                    <th>Cover Image</th>
-                    {/* <th>Status</th> */}
+                    <th>Feature&nbsp;Image</th>
+                    <th>Cover&nbsp;Image</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {activityData &&
-                    activityData.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.data.aid}</td>
-                        <td>{item.data.title}</td>
-                        <td>{item.data.activityTitle}</td>
-                        <td>{item.data.description}</td>
-                        <td>
-                          {" "}
-                          <img
-                            src={item.data.image}
-                            style={{
-                              width: "100px",
-                              height: "100px",
-                              objectFit: "cover",
-                            }}
-                          />{" "}
-                        </td>
-                        <td>
-                          {" "}
-                          <img
-                            src={item.data.coverImage}
-                            style={{
-                              width: "100px",
-                              height: "100px",
-                              objectFit: "cover",
-                            }}
-                          />{" "}
-                        </td>
 
-                        <td
+                <tbody>
+                  {activities.map((item) => (
+                    <tr key={item.data.aid}>
+                      <td>{item.data.aid}</td>
+                      <td>{item.data.title}</td>
+                      <td>{item.data.activityTitle}</td>
+                      <td>{item.data.description}</td>
+
+                      <td>
+                        <img
+                          src={item.data.image}
+                          alt={`${item.data.title} feature`}
                           style={{
-                            display: "flex",
-                            gap: "0.5rem",
-                            height: "100%",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "center",
+                            width: 100,
+                            height: 100,
+                            objectFit: "cover",
                           }}
+                        />
+                      </td>
+
+                      <td>
+                        <img
+                          src={item.data.coverImage}
+                          alt={`${item.data.title} cover`}
+                          style={{
+                            width: 100,
+                            height: 100,
+                            objectFit: "cover",
+                          }}
+                        />
+                      </td>
+
+                      <td
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.5rem",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Link
+                          href={`/addActivity?activityId=${item.data.aid}`}
+                          className="btn2"
                         >
-                          <a
-                            href={`/addActivity?acivityId=${item.data.aid}`}
-                            className="btn2"
-                          >
-                            Edit
-                          </a>
-                          <button
-                            className="btn2"
-                            onClick={() => openPop(item.data.aid)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                          Edit
+                        </Link>
+                        <button
+                          type="button"
+                          className="btn2"
+                          onClick={() => openConfirm(item.data.aid)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             ) : (
-              <p className="loading">Fetching contact requests...</p>
+              <p>No activities found.</p>
             )}
           </div>
         </div>

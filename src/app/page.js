@@ -26,22 +26,24 @@ function Card(props) {
 export default function Home() {
   const [stats, setStats] = useState({
     testimonials: 0,
-    contacts:0,
+    contacts: 0,
   });
 
   // const [helper, setHelper] = useState([]);
 
   useEffect(() => {
     getTestimonials().then((data) => {
-      setStats({ ...stats, testimonials: data.length });
+      setStats((prevStats) => ({
+        ...prevStats,
+        testimonials: data.length,
+      }));
     });
     getContacts().then((data) => {
-      // setStats({ ...stats, contacts: data.length });
-      console.log(data);
+      setStats((prevStats) => ({
+        ...prevStats,
+        contacts: data.length,
+      }));
     });
-
-
-
   }, []);
 
   return (
