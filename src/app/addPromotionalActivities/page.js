@@ -8,7 +8,7 @@ import Confirmation from "../(comps)/confirmation/Confirmation";
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activityData, setActivityData] = useState([]);
-
+  const [pendingId, setPendingId] = useState(null);
 
   const [deletepop, setDeletepop] = useState(false);
   useEffect(() => {
@@ -23,24 +23,27 @@ const Page = () => {
   }, []);
 
   const deleteActivity = async () => {
-    try {
-      const id = localStorage.getItem("id");
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/PramotionalActivity/delete/${id}`
-      );
 
-      localStorage.removeItem("id");
+    if(!pendingId) return;
+    try {
+      // const id = localStorage.getItem("id");
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/PramotionalActivity/delete/${pendingId}`
+      );
       setDeletepop(false);
-      window.location.reload();
+      setPendingId(null);
+      // localStorage.removeItem("id");
+      // window.location.reload();
       getpromoActivity();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
   const openPop = (id) => {
-    localStorage.setItem("id", id);
-
+    // localStorage.setItem("id", id);
+    setPendingId(id);
     setDeletepop(true);
   };
 
@@ -84,7 +87,7 @@ const Page = () => {
           </div>
           <div className="table-box">
             {!isLoading ? (
-            activityData &&  activityData.length > 0 ? (
+              activityData && activityData.length > 0 ? (
                 <table>
                   <thead>
                     <tr>
@@ -96,51 +99,52 @@ const Page = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {activityData && activityData.map((item, index) => (
-                      <tr key={index}>
-                        <td>{index + 1 || "N/A"}</td>
-                        <td>{item?.data?.title || "N/A"}</td>
-                        <td>{item?.data?.description || "N/A"}</td>
-                        <td>
-                          {item?.data?.image ? (
-                            <img
-                              src={item.data.image}
-                              style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                              }}
-                              alt="Promo"
-                            />
-                          ) : (
-                            "No Image"
-                          )}
-                        </td>
-                        <td
-                          style={{
-                            display: "flex",
-                            gap: "0.5rem",
-                            height: "100%",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <a
-                            href={`promotionalActivities?acivityId=${item?.data?.paId}`}
-                            className="btn2"
+                    {activityData &&
+                      activityData.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1 || "N/A"}</td>
+                          <td>{item?.data?.title || "N/A"}</td>
+                          <td>{item?.data?.description || "N/A"}</td>
+                          <td>
+                            {item?.data?.image ? (
+                              <img
+                                src={item.data.image}
+                                style={{
+                                  width: "100px",
+                                  height: "100px",
+                                  objectFit: "cover",
+                                }}
+                                alt="Promo"
+                              />
+                            ) : (
+                              "No Image"
+                            )}
+                          </td>
+                          <td
+                            style={{
+                              display: "flex",
+                              gap: "0.5rem",
+                              height: "100%",
+                              justifyContent: "center",
+                              flexDirection: "column",
+                              alignItems: "center",
+                            }}
                           >
-                            Edit
-                          </a>
-                          <button
-                            className="btn2"
-                            onClick={() => openPop(item?.data?.paId)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                            <a
+                              href={`promotionalActivities?acivityId=${item?.data?.paId}`}
+                              className="btn2"
+                            >
+                              Edit
+                            </a>
+                            <button
+                              className="btn2"
+                              onClick={() => openPop(item?.data?.paId)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               ) : (
