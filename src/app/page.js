@@ -35,13 +35,13 @@ export default function Home() {
     getTestimonials().then((data) => {
       setStats((prevStats) => ({
         ...prevStats,
-        testimonials: data.length,
+        testimonials: data?.length,
       }));
     });
     getContacts().then((data) => {
       setStats((prevStats) => ({
         ...prevStats,
-        contacts: data.length,
+        contacts: data?.length,
       }));
     });
   }, []);
