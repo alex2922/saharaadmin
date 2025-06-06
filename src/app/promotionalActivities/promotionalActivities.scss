@@ -14,6 +14,18 @@
           textarea{
             min-height: 250px;
           }
+
+          .ck-editor {
+            height:100px;
+
+            .ck-editor__main{
+              height: 100px;
+
+              .ck-content{
+                height: 100%;
+              }
+            }
+          }
   
   
   

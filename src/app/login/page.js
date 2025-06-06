@@ -15,11 +15,11 @@ const Page = () => {
 
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (!localStorage.getItem("id")) {
-  //     router.push("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (localStorage.getItem("id")) {
+      router.push("/");
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
