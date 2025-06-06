@@ -9,7 +9,6 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activityData, setActivityData] = useState([]);
 
-
   const [deletepop, setDeletepop] = useState(false);
   useEffect(() => {
     setIsLoading(true);
@@ -84,7 +83,7 @@ const Page = () => {
           </div>
           <div className="table-box">
             {!isLoading ? (
-            activityData &&  activityData.length > 0 ? (
+              activityData && activityData.length > 0 ? (
                 <table>
                   <thead>
                     <tr>
@@ -96,51 +95,52 @@ const Page = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {activityData && activityData.map((item, index) => (
-                      <tr key={index}>
-                        <td>{index + 1 || "N/A"}</td>
-                        <td>{item?.data?.title || "N/A"}</td>
-                        <td>{item?.data?.description || "N/A"}</td>
-                        <td>
-                          {item?.data?.image ? (
-                            <img
-                              src={item.data.image}
-                              style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                              }}
-                              alt="Promo"
-                            />
-                          ) : (
-                            "No Image"
-                          )}
-                        </td>
-                        <td
-                          style={{
-                            display: "flex",
-                            gap: "0.5rem",
-                            height: "100%",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <a
-                            href={`promotionalActivities?acivityId=${item?.data?.paId}`}
-                            className="btn2"
+                    {activityData &&
+                      activityData.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1 || "N/A"}</td>
+                          <td>{item?.data?.title || "N/A"}</td>
+                          <td>{item?.data?.description || "N/A"}</td>
+                          <td>
+                            {item?.data?.image ? (
+                              <img
+                                src={item.data.image}
+                                style={{
+                                  width: "100px",
+                                  height: "100px",
+                                  objectFit: "cover",
+                                }}
+                                alt="Promo"
+                              />
+                            ) : (
+                              "No Image"
+                            )}
+                          </td>
+                          <td
+                            style={{
+                              display: "flex",
+                              gap: "0.5rem",
+                              height: "100%",
+                              justifyContent: "center",
+                              flexDirection: "column",
+                              alignItems: "center",
+                            }}
                           >
-                            Edit
-                          </a>
-                          <button
-                            className="btn2"
-                            onClick={() => openPop(item?.data?.paId)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                            <a
+                              href={`promotionalActivities?acivityId=${item?.data?.paId}`}
+                              className="btn2"
+                            >
+                              Edit
+                            </a>
+                            <button
+                              className="btn2"
+                              onClick={() => openPop(item?.data?.paId)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               ) : (

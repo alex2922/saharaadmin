@@ -25,8 +25,6 @@ const Page = () => {
       .finally(() => setIsLoading(false));
   };
 
-  
-
   const deleteActivity = async () => {
     if (!pendingId) return;
     try {
