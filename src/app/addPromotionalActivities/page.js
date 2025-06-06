@@ -9,6 +9,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activityData, setActivityData] = useState([]);
 
+
   const [deletepop, setDeletepop] = useState(false);
   useEffect(() => {
     setIsLoading(true);
@@ -22,24 +23,27 @@ const Page = () => {
   }, []);
 
   const deleteActivity = async () => {
-    try {
-      const id = localStorage.getItem("id");
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/PramotionalActivity/delete/${id}`
-      );
 
-      localStorage.removeItem("id");
+    if(!pendingId) return;
+    try {
+      // const id = localStorage.getItem("id");
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/PramotionalActivity/delete/${pendingId}`
+      );
       setDeletepop(false);
-      window.location.reload();
+      setPendingId(null);
+      // localStorage.removeItem("id");
+      // window.location.reload();
       getpromoActivity();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
   const openPop = (id) => {
-    localStorage.setItem("id", id);
-
+    // localStorage.setItem("id", id);
+    setPendingId(id);
     setDeletepop(true);
   };
 
