@@ -19,6 +19,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { PiMegaphone } from "react-icons/pi";
+import { TfiGallery } from "react-icons/tfi";
 
 function Sidebar() {
   const { isDarkMode, toggleTheme } = ThemeStore();
@@ -65,6 +66,11 @@ function Sidebar() {
       name: "Contacts",
       path: "/contacts",
       icon: <MdOutlineContactPage />,
+    },
+    {
+      name: " Gallery",
+      path: "/gallery",
+      icon: <TfiGallery />,
     },
   ];
 
