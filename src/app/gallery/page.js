@@ -133,7 +133,7 @@ const Page = () => {
             
             <div class="btns">
               <button className="btn" onClick={() => setPopUp(true)}>
-                Add Gallery
+                Add Image
               </button>
             </div>
           </div>
