@@ -8,7 +8,7 @@ import Confirmation from "../(comps)/confirmation/Confirmation";
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activityData, setActivityData] = useState([]);
-
+  const [pendingId, setPendingId] = useState(null);
 
   const [deletepop, setDeletepop] = useState(false);
   useEffect(() => {
@@ -23,8 +23,7 @@ const Page = () => {
   }, []);
 
   const deleteActivity = async () => {
-
-    if(!pendingId) return;
+    if (!pendingId) return;
     try {
       // const id = localStorage.getItem("id");
       await axios.delete(

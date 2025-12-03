@@ -42,7 +42,7 @@ const Page = () => {
         localStorage.setItem("id", response.data.data.id);
 
         router.push("/");
-        window.location.reload()
+        window.location.reload();
       }
     } catch (error) {
       if (error.status === 400) {
