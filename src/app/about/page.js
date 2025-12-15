@@ -22,6 +22,7 @@ const Page = () => {
     confirm: false,
   });
 
+  
   useEffect(() => {
     setIsLoading(true);
     getAboutData().then((data) => {
