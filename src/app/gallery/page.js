@@ -7,21 +7,20 @@ import axios from "axios";
 import { MdCloudUpload } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 const Page = () => {
-  const [images, setImages] = useState();
+  const [images, setImages] = useState([]);
   const [popup, setPopUp] = useState(false);
   const [imagefile, setImageFile] = useState();
   const [editId, setEditId] = useState();
-  const [delayeMessage, setDelayedMessage] = useState(false)
+  const [delayeMessage, setDelayedMessage] = useState(false);
 
   const getAllImages = async () => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/MediaController/getAllImage`
       );
+      console.log(response.data.data, "response>>>");
 
-      console.log(response.data);
-
-      setImages(response.data);
+      setImages(response?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +57,7 @@ const Page = () => {
       }
 
       if (response.status === 200) {
-        setDelayedMessage(true)
+        setDelayedMessage(true);
         getAllImages();
         setImageFile(null);
         setPopUp(false);
@@ -84,7 +83,7 @@ const Page = () => {
       if (!confirm) return;
 
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/MediaController/deleteImage?mId=${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/MediaController/deleteImage?iId=${id}`
       );
 
       if (response.status === 200) {
@@ -94,6 +93,8 @@ const Page = () => {
       console.log(error);
     }
   };
+
+  console.log(images, "images")
 
   return (
     <>
@@ -123,14 +124,14 @@ const Page = () => {
             <div class="title">
               <h2>Gallery</h2>
             </div>
-           
-              {
-                delayeMessage &&
-                <p>
-                  The Gallery is currently under maintenance. Please check 1 min later.
-                </p>
-              }
-            
+
+            {delayeMessage && (
+              <p>
+                The Gallery is currently under maintenance. Please check 1 min
+                later.
+              </p>
+            )}
+
             <div class="btns">
               <button className="btn" onClick={() => setPopUp(true)}>
                 Add Image
@@ -139,24 +140,24 @@ const Page = () => {
           </div>
 
           <div class="gallery_list">
-            {images &&
-              images.map((item, index) => (
+            {Array.isArray(images) &&
+              images?.map((item, index) => (
                 <>
                   <div
                     class="image "
                     key={index}
-                    style={{ backgroundImage: `url(${item?.data?.image})` }}
+                    style={{ backgroundImage: `url(${item?.images})` }}
                   >
                     <div class="overlay">
-                      <div
+                      {/* <div
                         class="icon"
-                        onClick={() => openEditPopUp(item?.data?.mid)}
+                        onClick={() => openEditPopUp(item?.iid)}
                       >
                         <MdModeEditOutline />
-                      </div>
+                      </div> */}
                       <div
                         class="icon"
-                        onClick={() => deleteImage(item?.data?.mid)}
+                        onClick={() => deleteImage(item?.iid)}
                       >
                         <MdDelete />
                       </div>
